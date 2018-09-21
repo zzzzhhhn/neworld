@@ -33,10 +33,21 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Getter, Action } from "vuex-class";
+import fetch from '../libs/fetch'
 
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+  @Action("getMenuList")
+  doGetMenuList() {}
+
+  created() {
+    fetch('api/v1/banner/1', {},(res: any) => {
+      console.log(res);
+    })
+    this.doGetMenuList();
+  }
 }
 </script>
 
