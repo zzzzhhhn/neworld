@@ -5,6 +5,14 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import './plugins/iview.js'
+import './assets/less/layouts.less';
+import $ from 'jquery'
+
+declare global {
+  interface Window { $: any; }
+}
+
+window.$ = $
 
 Vue.config.productionTip = false
 

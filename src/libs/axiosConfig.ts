@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import url from './urlConfig';
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -7,7 +7,7 @@ import axios from 'axios';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 const config = {
-  baseURL: process.env.NODE_ENV === 'development' ? 'http://127.0.0.1/zerg/public' : 'http://zoraworld.club',
+  baseURL: url,
   timeout: 60 * 1000, // Timeout
   withCredentials: true, // Check cross-site Access-Control
 };
