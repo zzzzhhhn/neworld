@@ -11,7 +11,7 @@ import fetch from './fetch';
 export default {
   // 登录信息
   getMenuData(cb: any, params: any) {
-      return fetch('server/main.php', {menu: true}, cb);
+      return fetch('menu', {}, cb);
   },
   getIndexData(cb: any, params: any) {
       return fetch('server/main.php', { bNo: params }, cb);

@@ -1,3 +1,3 @@
-const url = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1/zerg/public' : 'http://zoraworld.club';
+const url = process.env.NODE_ENV === 'development' ? 'http://localhost/zwServer/public/api/' : 'http://zoraworld.club/zwServer/public/api/';
 
 export default url;

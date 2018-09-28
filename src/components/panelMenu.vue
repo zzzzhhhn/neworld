@@ -65,7 +65,7 @@
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import { Getter, Action} from 'vuex-class';
     import fetch from '../libs/fetch'
-
+    import md5 from 'md5';
 
     @Component({
         components: {
@@ -107,6 +107,14 @@
         doGetMenuList() {};
 
         created() {
+//            this.$axios.post('localhost/zwServer/public/api/signin', {account: '123456', password: '1234455'}).then(res => {
+//            console.log(res)
+//        })
+            fetch('signin', {account: 'zora', password: md5('123456')}, (res: any) => {
+                console.log(res)
+
+            });
+
             this.doGetMenuList();
         }
 
