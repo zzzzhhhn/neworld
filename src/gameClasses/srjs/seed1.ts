@@ -9,7 +9,7 @@ export default class Seed1 {
     private _y: number[] = [];
     private _X: number[] = [];
     private _Y: number[] = [];
-    private _s: number;
+    private _s: number = 0;
     private _r: number[] = [];
     private _num: number;
     private _alive: boolean[] = [];

@@ -34,16 +34,16 @@ export default class Dragon {
     private _aimY: number[] = [];
     private _ctx1: any;
     private _ctx2: any;
-    private _sj: Sj;
+    private _sj: Sj|null = null;
     private _dragonPicl: HTMLImageElement[] = [];
     private _dragonPicr: HTMLImageElement[] = [];
-    private _knight: Knight;
+    private _knight: Knight|null = null;
     private _dragonPlan: HTMLImageElement;
     private _dragonEgg: HTMLImageElement;
-    private _bg: Bg;
-    private _data: Data;
-    private _cx: number;
-    private _cy: number;
+    private _bg: Bg|null = null;
+    private _data: Data|null = null;
+    private _cx: number = 0;
+    private _cy: number = 0;
 
     constructor(ctx1: any, ctx2: any, dragonPicl: HTMLImageElement[], dragonPicr: HTMLImageElement[], dragonPlan: HTMLImageElement, dragonEgg: HTMLImageElement) {
         this._grassCost = 100;
@@ -140,7 +140,7 @@ export default class Dragon {
                     this._delta[i] %= 50;
                 }
                 this._sjDel[i] += deltaTime;
-                if (this._sjDel[i] > this._sjDelTime) {
+                if (this._sjDel[i] > this._sjDelTime && this._sj) {
                     for (let j = 0; j < this._sj.num; j++) {
                         if (!this._sj.alive[j] && this._alive[i]) {
                             this._sj.born(j, this._planX[i] + Math.random() * 100, this._planY[i] + 70);
@@ -188,19 +188,21 @@ export default class Dragon {
                 if (this._y[i] > (this._planY[i] + 100)) {
                     this._front[i] = 'back';
                 }
-                for (let j = 0; j < this._knight.num; j++) {
-                    if (!this._fight[i] && (this._knight.x[j] >= this._planX[i] - 200) && (this._knight.x[j] <= this._planX[i] + 300) &&
-                        (this._knight.y[j] >= this._planY[i] - 200) && (this._knight.y[j] <= this._planY[i] + 300) && this._knight.alive[j]) {
-                        this._aim[i] = j;
-                        this._fight[i] = true;
+                if (this._knight) {
+                    for (let j = 0; j < this._knight.num; j++) {
+                        if (!this._fight[i] && (this._knight.x[j] >= this._planX[i] - 200) && (this._knight.x[j] <= this._planX[i] + 300) &&
+                            (this._knight.y[j] >= this._planY[i] - 200) && (this._knight.y[j] <= this._planY[i] + 300) && this._knight.alive[j]) {
+                            this._aim[i] = j;
+                            this._fight[i] = true;
+                        }
                     }
                 }
-                if (this._aim[i] !== -1) {
+                if (this._aim[i] !== -1 && this._knight) {
                     this._aimX[i] = this._knight.x[this._aim[i]];
                     this._aimY[i] = this._knight.y[this._aim[i]];
                 }
 
-                if (this._fight[i]) {
+                if (this._fight[i] && this._knight) {
                     this._x[i] = Toolkit.lerpDistance(this._aimX[i], this._x[i], 0.995);
                     this._y[i] = Toolkit.lerpDistance(this._aimY[i], this._y[i], 0.995);
 
@@ -283,20 +285,30 @@ export default class Dragon {
         this._full[i] = false;
         this._planX[i] = this._cx;
         this._planY[i] = this._cy;
-        this._bg.over[this._bg.cbg] = 'dragon';
-        this._data.limit++;
+        if (this._bg) {
+            this._bg.over[this._bg.cbg] = 'dragon';
+        }
+        if (this._data) {
+            this._data.limit++;
+        }
         this._fight[i] = false;
         this._life[i] = 200;
-        this._bgIndex[i] = this._bg.cbg;
+        if (this._bg) {
+            this._bgIndex[i] = this._bg.cbg;
+        }
         this._aim[i] = -1;
     }
 
     die(i: number) {
         this._alive[i] = false;
-        this._data.limit--;
+        if (this._data) {
+            this._data.limit--;
+        }
         this._fight[i] = false;
-        this._bg.over[this._bg.cbg] = '';
-        this._bg.occupied[this._bgIndex[i]] = false;
+        if (this._bg) {
+            this._bg.over[this._bg.cbg] = '';
+            this._bg.occupied[this._bgIndex[i]] = false;
+        }
         this._limit--;
     }
 

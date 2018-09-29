@@ -31,7 +31,7 @@
 
 <script lang="ts">
     import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
-    import SudokuGame from '../gameClasses/sudoku/index.ts';
+    import SudokuGame from '../gameClasses/sudoku/index';
 
     @Component
     export default class MyComponent extends Vue {

@@ -37,13 +37,13 @@ export default class Knight {
     private _knightL: HTMLImageElement[] = [];
     private _knightR: HTMLImageElement[] = [];
     private _housePic: HTMLImageElement[] = [];
-    private _slm: Slm;
-    private _mogu: Mogu;
-    private _dragon: Dragon;
-    private _fish: Fish;
-    private _house: House;
-    private _data: Data;
-    private _game: Game;
+    private _slm: Slm|null = null;
+    private _mogu: Mogu|null = null;
+    private _dragon: Dragon|null = null;
+    private _fish: Fish|null = null;
+    private _house: House|null = null;
+    private _data: Data|null = null;
+    private _game: Game|null = null;
 
     constructor(ctx2: any, bgX: number, bgY: number, knightF: HTMLImageElement[], knightB: HTMLImageElement[], knightL: HTMLImageElement[], knightR: HTMLImageElement[], housePic: HTMLImageElement[]) {
         this._num = 0;
@@ -142,7 +142,9 @@ export default class Knight {
                 this._lx[i] = 100 * Math.random();
                 this._ly[i] = 50 * Math.random();
             }
-
+            if(!this._slm || !this._mogu || !this._fish || !this._dragon) {
+                return;
+            }
             for (let j = 0; j < this._slm.num; j++) {
                 if (this._slm.alive[j] && !this._fight[i]) {
                     this._fight[i] = true;
@@ -214,8 +216,10 @@ export default class Knight {
             } else {
                 this._aim[i] = 'house';
                 this._fight[i] = true;
-                this._aimX[i] = this._house.x + this._housePic[this._house.level].width * 0.5;
-                this._aimY[i] = this._house.y + this._housePic[this._house.level].height * 0.5;
+                if (this._house) {
+                    this._aimX[i] = this._house.x + this._housePic[this._house.level].width * 0.5;
+                    this._aimY[i] = this._house.y + this._housePic[this._house.level].height * 0.5;
+                }
             }
 
             if (this._fight[i]) {
@@ -255,7 +259,7 @@ export default class Knight {
                             this._fight[i] = false;
                         }
                     }
-                    if (this._aim[i] === 'house') {
+                    if (this._aim[i] === 'house' && this._house && this._game) {
                         this._house.life--;
                         if (this._house.life <= 0) {
                             this._house.life = 0;
@@ -328,7 +332,7 @@ export default class Knight {
     }
 
     knightControl() {
-        if (this._data.attact) {
+        if (this._data && this._data.attact) {
             let count = 0;
             for (let i = 0; i < this._num; i++) {
                 if (this._alive[i]) {

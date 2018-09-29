@@ -5,10 +5,10 @@
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
             <div class="right-menu-item cursor-pointer" v-if="userData.roleId === '1'" @click="onshowLeftMenu('manage')">管理</div>
-            <div class="user-name" @click.self="onshowRightMenu()">欢迎您，{{!!userData.userName ? userData.userName : '游客250'}}</div>
+            <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.userName ? userData.userName : '游客250'}}</div>
            
         </div>
-        <div class="right-menu-sign"  @click.self="onshowRightMenu()">
+        <div class="right-menu-sign"  @click.self="onShowRightMenu()">
             <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_in')">登录</div>
             <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_up')">注册</div>
         </div>
@@ -110,7 +110,7 @@
 //            this.$axios.post('localhost/zwServer/public/api/signin', {account: '123456', password: '1234455'}).then(res => {
 //            console.log(res)
 //        })
-            fetch('signin', {account: 'zora', password: md5('123456')}, (res: any) => {
+            fetch('chapter_update' , {content: '13456', id: 11}, (res: any) => {
                 console.log(res)
 
             });
@@ -149,7 +149,7 @@
         /**
          * 显示面板
          */
-        onshowRightMenu() {
+        onShowRightMenu() {
             if(!this.showRightMenu) {
                 this.showRightMenu = true;
                 $('.right-menu').css('top', 0);

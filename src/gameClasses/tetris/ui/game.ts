@@ -24,6 +24,17 @@ export class Game {
     constructor(user: string) {
         this._user = user;
         this._speed = 1000;
+        this._score = 0;
+        this._start = false;
+        this._gameOver = false;
+        this._win = false;
+        this._lose = false;
+        this._gameMatrix = Toolkit.matrix.makeMatrix(0,10,20);
+        this._nextMatrix = Toolkit.matrix.makeMatrix(0,4,4);
+        this._currentSquare = new Square();
+        this._nextMatrix = this._currentSquare.nextMatrix;
+        this._gameSquare = new SquareFactory(this._gameMatrix, $('#panel-' + this._user));
+        this._nextSquare = new SquareFactory(this._nextMatrix, $('#next-' + this._user));
     }
 
     get  currentSquare() {
@@ -74,16 +85,8 @@ export class Game {
      * 初始化游戏
      */
     public init() {
-        this._score = 0;
-        this._start = false;
-        this._gameOver = false;
-        this._win = false;
-        this._lose = false;
         $('#score-' + this._user).text(this._score);
-        this._gameMatrix = Toolkit.matrix.makeMatrix(0,10,20);
-        this._nextMatrix = Toolkit.matrix.makeMatrix(0,4,4);
-        this._currentSquare = new Square();
-        this._nextMatrix = this._currentSquare.nextMatrix;
+
         this.build();
         this.refreshGame();
         this.refreshNext(this._currentSquare.nextMatrix);
@@ -171,9 +174,7 @@ export class Game {
      * 生成dom
      */
     private build() {
-        this._gameSquare = new SquareFactory(this._gameMatrix, $('#panel-' + this._user));
         this._gameSquare.build();
-       this._nextSquare = new SquareFactory(this._nextMatrix, $('#next-' + this._user));
         this._nextSquare.build();
     }
 

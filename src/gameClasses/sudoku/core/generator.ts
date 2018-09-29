@@ -4,9 +4,9 @@ import Toolkit from './toolkit';
 
 export class Generator {
 
-    public matrix: number[][];
+    public matrix: number[][]|null = null;
     
-    private orders: number[][];
+    private orders: number[][]|null = null;
 
     //入口
     generate(): void {
@@ -38,12 +38,12 @@ export class Generator {
             return true;
         }
 
-        const row: number[]= this.matrix[rowIndex];
-        const order: number[] = this.orders[rowIndex];
+        const row: number[]|null= this.matrix && this.matrix[rowIndex];
+        const order: number[]|null = this.orders && this.orders[rowIndex];
         for(let i = 0; i < 9; i++) {
-            const colIndex: number = order[i];
+            const colIndex: number|null = order && order[i];
             //有值跳过
-            if(row[colIndex] !== 0) {
+            if(row && colIndex && row[colIndex] !== 0) {
                 continue;
             }
 

@@ -16,9 +16,9 @@ export default class House {
     private _alive: boolean;
     private _ctx2: any;
     private _housePic: HTMLImageElement[] = [];
-    private _farmer: Farmer;
-    private _maid: Maid;
-    private _grass: Grass;
+    private _farmer: Farmer|null = null;
+    private _maid: Maid|null = null;
+    private _grass: Grass|null = null;
 
     constructor(ctx2: any, bgX: number, bgY: number, housePic: HTMLImageElement[]) {
         this._level = 1;
@@ -80,6 +80,9 @@ export default class House {
     }
 
     draw() {
+        if(!this._farmer || !this._maid || !this._grass) {
+            return;
+        }
         if (this._level == 2) {
             this._grassCost = 100;
             this._sjCost = 50;

@@ -215,10 +215,6 @@ export default class MonsterGame {
         this._slmPlan.src = require('../../assets/img/monster/plan/slmPlan.png');
         this._sjPic = new Image();
         this._sjPic.src = require('../../assets/img/monster/sj.png');
-
-    }
-
-    start() {
         this._game = new Game();
         this._bg = new BG(this._ctx1, this._W, this._H, this._bgPic, this._wlPic);
         this._grass = new Grass(this._ctx1, this._bg, this._grassPic);
@@ -250,6 +246,9 @@ export default class MonsterGame {
 
         this._lasttime = Date.now();
         this._deltaTime = 0;
+    }
+
+    start() {
 
         this.gameLoop();
     }

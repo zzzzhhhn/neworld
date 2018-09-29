@@ -29,14 +29,16 @@ const boxToolkit = {
             colIndex: boxIndex % 3 * 3 + cellIndex % 3
         }
     },
-    getBoxCells (matrix: number[][], boxIndex: number): number[] {
+    getBoxCells (matrix: number[][]|null, boxIndex: number): number[]|null {
         const startRowIndex = Math.floor(boxIndex / 3) * 3;
         const startColIndex = boxIndex % 3 * 3;
         const result = [];
-        for(let cellIndex = 0; cellIndex < 9; cellIndex++) {
-            const rowIndex = startRowIndex + Math.floor(cellIndex / 3);
-            const colIndex = startColIndex + cellIndex % 3;
-            result.push(matrix[rowIndex][colIndex]);
+        if (matrix) {
+            for (let cellIndex = 0; cellIndex < 9; cellIndex++) {
+                const rowIndex = startRowIndex + Math.floor(cellIndex / 3);
+                const colIndex = startColIndex + cellIndex % 3;
+                result.push(matrix[rowIndex][colIndex]);
+            }
         }
         return result;
     }
@@ -85,14 +87,16 @@ class MatrixTollkit {
      * @returns {boolean}
      */
 
-    static checkFillable(matrix: number[][],n: number,rowIndex: number,colIndex: number): boolean {
-        const row = matrix[rowIndex];
-        const col = this.makeRow().map((v,i) => matrix[i][colIndex]);
+    static checkFillable(matrix: number[][]|null,n: number,rowIndex: number,colIndex: number): boolean {
+        const row = matrix && matrix[rowIndex];
+        const col = this.makeRow().map((v,i) => matrix && matrix[i][colIndex]);
         const { boxIndex } = boxToolkit.convertToBoxIndex(rowIndex,colIndex);
         const box = boxToolkit.getBoxCells(matrix,boxIndex);
-        for(let i = 0; i < 9; i++) {
-            if(row[i] === n || col[i] === n || box[i] === n) {
-                return false;
+        if (row && box) {
+            for (let i = 0; i < 9; i++) {
+                if (row[i] === n || col[i] === n || box[i] === n) {
+                    return false;
+                }
             }
         }
         return true;

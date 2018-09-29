@@ -11,7 +11,7 @@ export default class Data {
     private _attactDel: number;
     private _al: number;
     private _ctx2: any;
-    private _knight: Knight;
+    private _knight: Knight|null = null;
 
     constructor(ctx2: any) {
         this._sjCount = 0;
@@ -84,7 +84,7 @@ export default class Data {
 
     attact(deltaTime: number) {
         this._attactDel -= deltaTime;
-        if (this._attactDel <= 0) {
+        if (this._attactDel <= 0 && this._knight) {
             this._knight.num += this._attact;
             this._attactDel = 120000;
             this._attact += 2;

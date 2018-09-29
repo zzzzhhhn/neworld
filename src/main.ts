@@ -7,6 +7,7 @@ import './registerServiceWorker';
 import './plugins/iview.js';
 import './assets/less/layouts.less';
 import $ from 'jquery';
+import 'iview/types/iview';
 
 
 declare global {

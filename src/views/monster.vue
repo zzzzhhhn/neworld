@@ -21,7 +21,8 @@
     export default class Monster extends Vue {
         private _game: MonsterGame;
 
-        mounted() {
+        constructor() {
+            super();
             this._game = new MonsterGame();
             this._game.start();
         }

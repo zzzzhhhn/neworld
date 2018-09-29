@@ -35,12 +35,12 @@ export default class Farmer {
     private _farmerR: HTMLImageElement[] = [];
     private _housePic: HTMLImageElement[] = [];
     private _ctx2: any;
-    private _bg: Bg;
-    private _data: Data;
-    private _house: House;
-    private _game: Game;
-    private _tree: Tree;
-    private _grass: Grass;
+    private _bg: Bg|null = null;
+    private _data: Data|null = null;
+    private _house: House|null =null;
+    private _game: Game|null =null;
+    private _tree: Tree|null =null;
+    private _grass: Grass|null =null;
 
     constructor(ctx2: any, farmerF: HTMLImageElement[], farmerB: HTMLImageElement[], farmerL: HTMLImageElement[], farmerR: HTMLImageElement[], housePic: HTMLImageElement[]) {
         this._ctx2 = ctx2;
@@ -91,6 +91,9 @@ export default class Farmer {
 
     draw(deltaTime: number, W: number, H: number,) {
         for (let i = 0; i < this._num; i++) {
+            if (!this._bg) {
+                return;
+            }
             const houseX1 = this._bg.x[41];
             const houseX2 = houseX1 + 90;
             const houseY1 = this._bg.y[41];
@@ -144,6 +147,9 @@ export default class Farmer {
             }
             if (this._y[i] > (H - 100)) {
                 this._front[i] = 'back';
+            }
+            if (!this._tree || !this._grass || !this._house) {
+                return;
             }
             for (let j = 0; j < this._tree.num; j++) {
                 if (this._tree.alive[j] && !this._working[i] && !this._tree.collected[j]) {
@@ -208,14 +214,14 @@ export default class Farmer {
                 if (l2 <= 900 && this._holding[i]) {
                     this._holding[i] = false;
                     this._working[i] = false;
-                    if (this._colleted[i] === 'grass')
+                    if (this._colleted[i] === 'grass' && this._data)
                         this._data.grassCount++;
-                    if (this._colleted[i] === 'tree')
+                    if (this._colleted[i] === 'tree' && this._data)
                         this._data.grassCount += 3;
                     // ctx2.drawImage(sjPic,sj.x+housePic[sj.level].width*0.5,sj.y-10,15,30);
                     return;
                 }
-                if (this._game.gameover) {
+                if (this._game && this._game.gameover) {
                     this._aimX[i] = -100;
                     this._aimY[i] = -100;
                     this._front[i] = 'left';

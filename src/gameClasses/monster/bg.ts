@@ -11,7 +11,7 @@ export default class BG {
     private _x2: number[] = [];              //右下角
     private _y2: number[] = [];
     private _occupied: boolean[] = [];       //当前地块上是否已被其他物品覆盖
-    private _cbg: number;               //当前点击地块索引
+    private _cbg: number = 0;               //当前点击地块索引
     private _over: string[] = [];            //当前地块覆盖物名称
     private _wl: boolean[] = [];             //是否显示围栏
     private _wlPic: HTMLImageElement;

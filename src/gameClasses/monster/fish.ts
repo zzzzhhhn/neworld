@@ -32,16 +32,16 @@ export default class Fish {
     private _aimY: number[] = [];
     private _ctx1: any;
     private _ctx2: any;
-    private _sj: Sj;
+    private _sj: Sj|null = null;
     private _fishPicl: HTMLImageElement[] = [];
     private _fishPicr: HTMLImageElement[] = [];
-    private _knight: Knight;
+    private _knight: Knight|null = null;
     private _fishPlan: HTMLImageElement;
     private _fishEgg: HTMLImageElement;
-    private _bg: Bg;
-    private _data: Data;
-    private _cx: number;
-    private _cy: number;
+    private _bg: Bg|null = null;
+    private _data: Data|null = null;
+    private _cx: number = 0;
+    private _cy: number = 0;
 
     constructor(ctx1: any, ctx2: any, fishPicl: HTMLImageElement[], fishPicr: HTMLImageElement[], fishPlan: HTMLImageElement, fishEgg: HTMLImageElement) {
         this._num = 10;
@@ -137,7 +137,7 @@ export default class Fish {
                     this._delta[i] %= 50;
                 }
                 this._sjDel[i] += deltaTime;
-                if (this._sjDel[i] > this._sjDelTime) {
+                if (this._sjDel[i] > this._sjDelTime && this._sj) {
                     for (let j = 0; j < this._sj.num; j++) {
                         if (!this._sj.alive[j] && this._alive[i]) {
                             this._sj.born(j, this._planX[i] + Math.random() * 100, this._planY[i] + 70);
@@ -184,6 +184,9 @@ export default class Fish {
                 }
                 if (this._y[i] > (this._planY[i] + 100)) {
                     this._front[i] = 'back';
+                }
+                if (!this._knight) {
+                    return;
                 }
                 for (let j = 0; j < this._knight.num; j++) {
                     if (!this._fight[i] && (this._knight.x[j] >= this._planX[i] - 200) && (this._knight.x[j] <= this._planX[i] + 300) && (this._knight.y[j] >= this._planY[i] - 200) && (this._knight.y[j] <= this._planY[i] + 300) && this._knight.alive[j]) {
@@ -275,6 +278,9 @@ export default class Fish {
         this._full[i] = false;
         this._planX[i] = this._cx;
         this._planY[i] = this._cy;
+        if (!this._bg || !this._data) {
+            return;
+        }
         this._bg.over[this._bg.cbg] = 'fish';
         this._data.limit++;
         this._fight[i] = false;
@@ -284,6 +290,9 @@ export default class Fish {
     }
 
     die(i: number) {
+        if (!this._bg || !this._data) {
+            return;
+        }
         this._alive[i] = false;
         this._data.limit--;
         this._fight[i] = false;

@@ -9,8 +9,8 @@ export default class Square {
     public _y: number;                     //纵向位置
     private _matrix: matrixObj;          //当前方块的数据
     private _nextMatrix: matrixObj;     //下一个方块的数据
-    private _leftWall: boolean;         //是否到达左边界
-    private _rightWall: boolean;        //是否到达右边界
+    private _leftWall: boolean = false;         //是否到达左边界
+    private _rightWall: boolean = false;        //是否到达右边界
 
 
     constructor() {

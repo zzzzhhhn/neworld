@@ -24,12 +24,13 @@
 
 <script lang="ts">
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator'
-    import TetrisGame from '../gameClasses/tetris/index.ts';
+    import TetrisGame from '../gameClasses/tetris/index';
 
     @Component
     export default class Tetris extends Vue {
         private _tetrisGame: TetrisGame;
-        mounted() {
+        constructor() {
+            super();
             this._tetrisGame = new TetrisGame();
             this._tetrisGame.start();
         }

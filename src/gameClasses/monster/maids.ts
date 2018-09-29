@@ -28,11 +28,11 @@ export default class Maid {
     private _maidB: HTMLImageElement[] = [];
     private _maidL: HTMLImageElement[] = [];
     private _maidR: HTMLImageElement[] = [];
-    private _sj: Sj;
-    private _house: House;
+    private _sj: Sj|null = null;
+    private _house: House| null = null;
     private _housePic: HTMLImageElement[] = [];
-    private _data: Data;
-    private _game: Game;
+    private _data: Data|null = null;
+    private _game: Game|null = null;
 
     constructor(ctx2: any, W: number, H: number, maidF: HTMLImageElement[], maidB: HTMLImageElement[], maidL: HTMLImageElement[], maidR: HTMLImageElement[],  housePic: HTMLImageElement[]) {
         this._num = 2;
@@ -128,6 +128,9 @@ export default class Maid {
             if (this._y[i] > (H - 100)) {
                 this._front[i] = 'back';
             }
+            if (!this._sj) {
+                return;
+            }
             for (let j = 0; j < this._sj.num; j++) {
                 if (this._sj.alive[j] && !this._working[i] && !this._sj.collected[j]) {
                     this._working[i] = true;
@@ -140,7 +143,7 @@ export default class Maid {
             }
 
 
-            if (this._working[i]) {
+            if (this._working[i] && this._house) {
                 this._x[i] = ToolKit.lerpDistance(this._aimX[i], this._x[i], 0.995);
                 this._y[i] = ToolKit.lerpDistance(this._aimY[i], this._y[i], 0.995);
                 const l = ToolKit.calLength2(this._aimX[i], this._aimY[i], this._x[i], this._y[i]);
@@ -151,7 +154,7 @@ export default class Maid {
                     this._aimY[i] = this._house.y + this._housePic[this._house.level].height * 0.5;
                 }
                 const l2 = ToolKit.calLength2(this._aimX[i], this._aimY[i], this._x[i], this._y[i]);
-                if (l2 <= 900 && this._holding[i]) {
+                if (l2 <= 900 && this._holding[i] && this._data) {
                     this._holding[i] = false;
                     this._working[i] = false;
                     this._data.sjCount++;
@@ -173,7 +176,7 @@ export default class Maid {
                 }
 
             }
-            if (this._game.gameover) {
+            if (this._game && this._game.gameover) {
                 this._aimX[i] = -100;
                 this._aimY[i] = -100;
                 this._x[i] = ToolKit.lerpDistance(this._aimX[i], this._x[i], 0.995);

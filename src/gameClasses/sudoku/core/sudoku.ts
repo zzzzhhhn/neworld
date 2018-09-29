@@ -5,7 +5,7 @@ export class Sudoku {
     
     private _solutionMatrix: number[][];
 
-    public _puzzleMatrix: number[][];
+    public _puzzleMatrix: number[][]|null = null;
     
     constructor() {
         const generate = new Generator();
@@ -13,7 +13,7 @@ export class Sudoku {
         this._solutionMatrix = generate.matrix;
     }
 
-    get puzzleMatrix(): number[][] {
+    get puzzleMatrix(): number[][]|null {
         return this._puzzleMatrix;
     }
 

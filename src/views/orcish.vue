@@ -32,8 +32,12 @@
 
         private _orcish: OrcishGame;
 
-        mounted() {
+        constructor() {
+            super();
             this._orcish = new OrcishGame();
+        }
+        mounted() {
+
             this.start();
             setTimeout(() => {
                 $('.rule').addClass('hide-rule');
