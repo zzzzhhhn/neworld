@@ -14,13 +14,13 @@ export default class Panel {
     private _y: number;
     private _show: boolean;
     private _ctx2: any;
-    private _bg: Bg;
-    private _data: Data;
-    private _house: House;
-    private _dragon: Dragon;
-    private _fish: Fish;
-    private _slm: Slm;
-    private _mogu: Mogu;
+    private _bg: Bg|null = null;
+    private _data: Data|null = null;
+    private _house: House|null = null;
+    private _dragon: Dragon|null = null;
+    private _fish: Fish|null = null;
+    private _slm: Slm|null = null;
+    private _mogu: Mogu|null = null;
     private _fishLogo: HTMLImageElement;
     private _moguLogo: HTMLImageElement;
     private _slmLogo: HTMLImageElement;
@@ -72,7 +72,7 @@ export default class Panel {
     }
 
     draw() {
-        if (this._show && !this._bg.occupied[this._bg.cbg]) {
+        if (this._show && this._bg && !this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(60,255,60,0.5)";
             this._ctx2.beginPath();
@@ -90,7 +90,7 @@ export default class Panel {
             this._ctx2.fillText('取消', this._x + 50, this._y + 60);
             this._ctx2.restore();
         }
-        if (this._show && this._bg.occupied[this._bg.cbg]) {
+        if (this._show && this._bg && this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(255,0,0,0.5)";
             this._ctx2.fillRect(this._x, this._y, 100, 100);
@@ -103,7 +103,7 @@ export default class Panel {
             this._ctx2.restore();
         }
 
-        if (this._show && this._bg.occupied[this._bg.cbg] && this._bg.over[this._bg.cbg] == 'house') {
+        if (this._show && this._bg && this._bg.occupied[this._bg.cbg] && this._bg.over[this._bg.cbg] == 'house') {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(60,255,60,0.5)";
             this._ctx2.strokeStyle = "white";
@@ -120,7 +120,7 @@ export default class Panel {
             this._ctx2.font = "20px Verdana";
             this._ctx2.fillText('升级', this._x + 50, this._y - 40);
             this._ctx2.restore();
-            if (this._house.grassCost > this._data.grassCount || this._house.sjCost > this._data.sjCount) {
+            if (this._house && this._data && (this._house.grassCost > this._data.grassCount || this._house.sjCost > this._data.sjCount)) {
                 this._ctx2.save();
                 this._ctx2.fillStyle = "rgba(100,100,100,0.8)";
                 this._ctx2.fillRect(this._x, this._y - 100, 100, 100);
@@ -133,7 +133,7 @@ export default class Panel {
                 this._ctx2.restore();
             }
         }
-        if ((this._fish.grassCost > this._data.grassCount || this._fish.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
+        if (this._fish && this._data && this._house && (this._fish.grassCost > this._data.grassCount || this._fish.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && this._bg && !this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(100,100,100,0.8)";
             this._ctx2.fillRect(this._x, this._y - 100, 100, 100);
@@ -145,7 +145,7 @@ export default class Panel {
             this._ctx2.fillText('水晶：' + this._fish.sjCost, this._x, this._y - 40);
             this._ctx2.restore();
         }
-        if ((this._mogu.grassCost > this._data.grassCount || this._mogu.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
+        if (this._mogu && this._data && this._house && this._bg && (this._mogu.grassCost > this._data.grassCount || this._mogu.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(100,100,100,0.8)";
             this._ctx2.fillRect(this._x, this._y + 100, 100, 100);
@@ -157,7 +157,7 @@ export default class Panel {
             this._ctx2.fillText('水晶：' + this._mogu.sjCost, this._x, this._y + 170);
             this._ctx2.restore();
         }
-        if ((this._slm.grassCost > this._data.grassCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
+        if (this._slm && this._data && this._house && this._bg && (this._slm.grassCost > this._data.grassCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(100,100,100,0.8)";
             this._ctx2.fillRect(this._x - 100, this._y, 100, 100);
@@ -168,7 +168,7 @@ export default class Panel {
             this._ctx2.fillText('纤维：' + this._slm.grassCost, this._x - 100, this._y + 40);
             this._ctx2.restore();
         }
-        if ((this._dragon.grassCost > this._data.grassCount || this._dragon.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
+        if (this._dragon && this._data && this._house && this._bg && (this._dragon.grassCost > this._data.grassCount || this._dragon.sjCost > this._data.sjCount || this._data.limit >= this._house.limit) && this._show && !this._bg.occupied[this._bg.cbg]) {
             this._ctx2.save();
             this._ctx2.fillStyle = "rgba(100,100,100,0.8)";
             this._ctx2.fillRect(this._x + 100, this._y, 100, 100);

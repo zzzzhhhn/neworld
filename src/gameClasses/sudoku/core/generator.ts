@@ -48,15 +48,17 @@ export class Generator {
             }
 
             //不能填跳过
-            if(!Toolkit.matrix.checkFillable(this.matrix,n,rowIndex,colIndex)) {
+            if(colIndex && !Toolkit.matrix.checkFillable(this.matrix,n,rowIndex,colIndex)) {
                 continue;
             }
-
+            if (row && colIndex) {
+                row[colIndex] = n;
+            }
             //填写
-            row[colIndex] = n;
+
 
             //当前行填写n成功，递归调用下一行
-            if(!this.fillRow(n, rowIndex + 1)) {
+            if(!this.fillRow(n, rowIndex + 1) && row && colIndex) {
                 row[colIndex] = 0;
                 continue;
             }

@@ -7,13 +7,20 @@ import './registerServiceWorker';
 import './plugins/iview.js';
 import './assets/less/layouts.less';
 import $ from 'jquery';
-import 'iview/types/iview';
+import post from './libs/fetch';
+
 
 
 declare global {
-  interface Window { $: any; }
-}
+    interface Window {
+        $: any;
+    }
 
+    interface Window {
+        post: any
+    }
+}
+window.post = post;
 window.$ = $;
 
 Vue.config.productionTip = false;

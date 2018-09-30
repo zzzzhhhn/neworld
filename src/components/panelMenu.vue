@@ -64,7 +64,7 @@
     import novelManage from './novelManage.vue';
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import { Getter, Action} from 'vuex-class';
-    import fetch from '../libs/fetch'
+    // import fetch from '../libs/fetch'
     import md5 from 'md5';
 
     @Component({
@@ -107,14 +107,6 @@
         doGetMenuList() {};
 
         created() {
-//            this.$axios.post('localhost/zwServer/public/api/signin', {account: '123456', password: '1234455'}).then(res => {
-//            console.log(res)
-//        })
-            fetch('chapter_update' , {content: '13456', id: 11}, (res: any) => {
-                console.log(res)
-
-            });
-
             this.doGetMenuList();
         }
 
@@ -124,9 +116,6 @@
                 this.rightMenuResize();
                 this.leftMenuItemResize();
             };
-            // setTimeout(() => {
-            //     $('.zora-world').addClass('loaded');
-            // },3000);
 
         }
         rightMenuResize() {
@@ -217,14 +206,14 @@
         onShowMain(id: string, name: string) {
             this.currentTitle = name;
             if(this.currentType === 'novels') {
-                fetch('server/main.php', {novels: id}, (res: any) => {
-                    if (res.data.code === 0) {
-                        this.novelData = res.data.data;
-                    } else {
-                        console.error('couldn`t get novels data');
-                    }
-
-                });
+                // fetch('server/main.php', {novels: id}, (res: any) => {
+                //     if (res.data.code === 0) {
+                //         this.novelData = res.data.data;
+                //     } else {
+                //         console.error('couldn`t get novels data');
+                //     }
+                //
+                // });
             }else if(id === 'manage') {
                 this.manageType = name;
                 if(name === 'novel') {
@@ -285,14 +274,14 @@
         onBeginReading(obj: any) {
             this.isReading = true;
             this.indexData = obj;
-            fetch('server/main.php', {index: obj.iNo}, (res: any) => {
-                if (res.data.code === 0) {
-                    this.contentData = res.data.data;
-                } else {
-                    console.error('couldn`t get content data');
-                }
-
-            });
+            // fetch('server/main.php', {index: obj.iNo}, (res: any) => {
+            //     if (res.data.code === 0) {
+            //         this.contentData = res.data.data;
+            //     } else {
+            //         console.error('couldn`t get content data');
+            //     }
+            //
+            // });
         }
         /**
          * 回到目录页
@@ -361,10 +350,6 @@
         background-repeat: no-repeat;
         background-size: cover;
         font-family: panel_font;
-
-        /*&.loaded {*/
-            /*background-image: url("../assets/img/bg.jpg");*/
-        /*}*/
 
         .right-menu {
             width: 20%;

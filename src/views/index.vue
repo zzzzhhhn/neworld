@@ -9,6 +9,8 @@
     import panelMenu from '../components/panelMenu.vue';
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
 
+
+
     @Component({
         components: {
             panelMenu

@@ -23,7 +23,7 @@ export default class Slm {
     private _full: boolean[] = [];
     private _sjDel: number[] = [];
     private _grassCost: number;
-    private _sjCost: number;
+    private _sjCost: number = 0;
     private _sjDelTime: number;
     private _fight: boolean[] = [];
     private _life: number[] = [];
@@ -33,16 +33,16 @@ export default class Slm {
     private _aimY: number[] = [];
     private _ctx1: any;
     private _ctx2: any;
-    private _sj: Sj;
+    private _sj: Sj|null = null;
     private _slmPicl: HTMLImageElement[] = [];
     private _slmPicr: HTMLImageElement[] = [];
-    private _knight: Knight;
+    private _knight: Knight|null = null;
     private _slmPlan: HTMLImageElement;
     private _slmEgg: HTMLImageElement;
-    private _bg: Bg;
-    private _data: Data;
-    private _cx: number;
-    private _cy: number;
+    private _bg: Bg|null = null;
+    private _data: Data|null = null;
+    private _cx: number = 0;
+    private _cy: number = 0;
 
     constructor(ctx1: any, ctx2: any, slmPicl: HTMLImageElement[], slmPicr: HTMLImageElement[], slmPlan: HTMLImageElement, slmEgg: HTMLImageElement) {
         this._num = 10;
@@ -135,7 +135,7 @@ export default class Slm {
                     this._delta[i] %= 50;
                 }
                 this._sjDel[i] += deltaTime;
-                if (this._sjDel[i] > this._sjDelTime) {
+                if (this._sjDel[i] > this._sjDelTime && this._sj) {
                     for (let j = 0; j < this._sj.num; j++) {
                         if (!this._sj.alive[j] && this._alive[i]) {
                             this._sj.born(j, this._planX[i] + Math.random() * 100, this._planY[i] + 70);
@@ -182,6 +182,9 @@ export default class Slm {
                 }
                 if (this._y[i] > (this._planY[i] + 200)) {
                     this._front[i] = 'back';
+                }
+                if (!this._knight) {
+                    return;
                 }
                 for (let j = 0; j < this._knight.num; j++) {
                     if (!this._fight[i] && (this._knight.x[j] >= this._planX[i] - 200) && (this._knight.x[j] <= this._planX[i] + 300) && (this._knight.y[j] >= this._planY[i] - 200) && (this._knight.y[j] <= this._planY[i] + 300) && this._knight.alive[j]) {
@@ -263,6 +266,9 @@ export default class Slm {
     }
 
     born(i: number) {
+        if (!this._data || !this._bg) {
+            return;
+        }
         this._x[i] = this._cx;
         this._y[i] = this._cy;
         this._alive[i] = true;
@@ -283,6 +289,9 @@ export default class Slm {
     }
 
     die(i: number) {
+        if (!this._data || !this._bg) {
+            return;
+        }
         this._alive[i] = false;
         this._data.limit--;
         this._fight[i] = false;

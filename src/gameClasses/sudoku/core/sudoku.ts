@@ -3,7 +3,7 @@ import Generator from './generator';
 
 export class Sudoku {
     
-    private _solutionMatrix: number[][];
+    private _solutionMatrix: number[][]|null;
 
     public _puzzleMatrix: number[][]|null = null;
     
@@ -18,7 +18,7 @@ export class Sudoku {
     }
 
     make(level: number = 5): void {
-        this._puzzleMatrix = this._solutionMatrix.map(row => row.map(cell => {
+        this._puzzleMatrix = this._solutionMatrix && this._solutionMatrix.map(row => row.map(cell => {
             return Math.random() * 9 < level ? 0 : cell;
         }))
     }
