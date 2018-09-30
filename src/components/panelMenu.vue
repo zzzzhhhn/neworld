@@ -4,7 +4,7 @@
         <div class="right-menu" >
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
-            <div class="right-menu-item cursor-pointer" v-if="userData.roleId === '1'" @click="onshowLeftMenu('manage')">管理</div>
+            <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1" @click="onshowLeftMenu('manage')">管理</div>
             <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.userName ? userData.userName : '游客250'}}</div>
            
         </div>
@@ -19,12 +19,10 @@
             </div>
             <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
             <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
-            <div class="btn-group btn-group-lg btn-manage" v-if="currentType === 'manage'" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" @click="onShowMain('manage', 'novel')">管理小说</button>
-            </div>
-            <div class="btn-group btn-group-lg btn-manage" v-if="currentType === 'manage'" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" @click="onShowMain('manage', 'game')">管理游戏</button>
-            </div>
+
+            <Button v-if="currentType === 'manage'" size="large" long type="success" class="f18 o6" @click="onShowMain('manage', 'novel')">管理小说</Button>
+            <Button v-if="currentType === 'manage'" size="large" long type="warning" class="f18 o6" @click="onShowMain('manage', 'game')">管理游戏</Button>
+
         </div>
         <!--上标题-->
         <div class="top-title" :class="{'show-title': showTitle, 'back-title': backTitle}">
@@ -64,8 +62,7 @@
     import novelManage from './novelManage.vue';
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import { Getter, Action} from 'vuex-class';
-    // import fetch from '../libs/fetch'
-    import md5 from 'md5';
+
 
     @Component({
         components: {
@@ -161,7 +158,7 @@
          * 显示左侧菜单
          * @param type
          */
-        onshowLeftMenu(type: string) {
+        onshowLeftMenu(type: string) {console.log(1)
             if(type !== this.tempType && this.showLeftMenu) {
                 this.showLeftMenu = false;
                 this.backLeftMenu = false;
@@ -381,7 +378,7 @@
             bottom: 10%;
             transition: right .5s ease-out;
 
-            background: url('../assets/img/right2.png') no-repeat;
+            background: url(../assets/img/right2.png) no-repeat;
             background-size: contain;
             opacity: @panel_opacity;
 

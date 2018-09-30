@@ -13,11 +13,15 @@
         interface Vue {
             $Modal: ModalInstance,
             $Message: Message,
+            validate: Function,
+            resetFields: Function
         }
 
         interface VueConstructor {
             $Modal: ModalInstance,
             $Message: Message,
+            validate: Function,
+            resetFields: Function
         }
     }
 

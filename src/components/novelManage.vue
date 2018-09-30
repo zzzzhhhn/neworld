@@ -1,19 +1,18 @@
 <template>
     <div class="container" v-if="currentPanel === 'list'">
-        <div class="row mb20" v-for="item in novelList" :key="item.mId">
-            <div class="col-xs-8 input-group input-group-lg pull-left" style="padding-right: 10px">
-                <span class="input-group-addon">书名</span>
-                <input class="form-control" v-model="item.mName"/>
+        <div class="row mb20" v-for="item in novelList" :key="item.id">
+            <div class="ml20 pull-left mr20">
+                <Input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入小说名称" />
             </div>
-            <div class="col-xs-4 btn-group btn-group-lg">
-                <button class="btn btn-warning" @click="updateNovelData(item)">保存</button>
-                <button class="btn btn-danger" @click="deleteNovelData(item.mId)">删除</button>
-                <button class="btn btn-info" @click="novelInfoManage(item.mId)">信息管理</button>
-            </div>
+            <ButtonGroup size="large">
+                <Button type="success" class="ml20" @click="updateNovelData(item)">保存</Button>
+                <Button type="warning" class="ml20" @click="deleteNovelData(item.id)">删除</Button>
+                <Button type="info" class="ml20" @click="novelInfoManage(item.id)">信息管理</Button>
+            </ButtonGroup>
         </div>
-        <div class="row btn-group btn-group-lg">
-            <button class="btn btn-primary" @click="addNovelData">新增</button>
-        </div>
+
+        <Button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addNovelData">新增</Button>
+
     </div>
     <div v-else-if="currentPanel === 'info'" class="text-center">
         <div class="novel-upload">
@@ -97,10 +96,10 @@ import url from '../libs/urlConfig';
 const E = require("wangeditor");
 
 interface listType {
-  mId: number;
-  mName: string;
-  mType: number;
-  mUrl: string;
+  id: number;
+  name: string;
+  type: number;
+  url: string;
 }
 
 interface indexType {
@@ -185,14 +184,30 @@ export default class novelManage extends Vue {
    * @param {listType} data
    */
   updateNovelData(data: listType) {
-    fetch("server/main.php", { menuData: data }, (res: any) => {
-      if (res.data.code === 0) {
-        alert("保存成功");
-        this.doGetMenuList;
+      if (!data.id) {
+          const post = {
+              name: data.name,
+              type: 1,
+              url: ''
+          };
+          window.post("menu_create", post, (res: any) => {
+              if (res.error_code === 0) {
+                  this.$Message.success('保存成功');
+                  this.doGetMenuList;
+              } else {
+                  this.$Message.error('保存失败');
+              }
+          });
       } else {
-        alert("保存失败");
+          window.post("menu_update", data, (res: any) => {
+              if (res.error_code === 0) {
+                  this.$Message.success('保存成功');
+                  this.doGetMenuList;
+              } else {
+                  this.$Message.error('保存失败');
+              }
+          });
       }
-    });
   }
 
   /**
@@ -200,10 +215,10 @@ export default class novelManage extends Vue {
    */
   addNovelData() {
     this.novelList.push({
-      mId: 0,
-      mName: "",
-      mType: 1,
-      mUrl: ""
+      id: 0,
+      name: '',
+      type: 1,
+      url: ''
     });
   }
 

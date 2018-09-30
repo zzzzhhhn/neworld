@@ -13,19 +13,19 @@ export default new Vuex.Store({
     indexList: {}
   },
   mutations: {
-    [USER_DATA](state, data) {
+    USER_DATA(state, data) {
       state.userData = data;
     },
-    [GAME_LIST](state, data) {
+    GAME_LIST(state, data) {
       state.gameList = data;
     },
-    [NOVEL_LIST](state, data) {
+    NOVEL_LIST(state, data) {
       state.novelList = data;
     },
-    [BLOG_LIST](state, data) {
+    BLOG_LIST(state, data) {
       state.blogList = data;
     },
-    [INDEX_LIST](state, data) {
+    INDEX_LIST(state, data) {
       state.indexList = data;
     }
   },
@@ -39,11 +39,11 @@ export default new Vuex.Store({
       const blogs: any[] = [];
       api.getMenuData((data: any) => {
         data.data.forEach((item: any) => {
-          if (item.mType === '1') {
+          if (item.type === '1') {
             novels.push(item);
-          } else if (item.mType === '2') {
+          } else if (item.type === '2') {
             games.push(item);
-          } else if (item.mType === '3') {
+          } else if (item.type === '3') {
             blogs.push(item);
           }
         });

@@ -1,102 +1,91 @@
 <template>
     <div class="app-sign">
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
-            </span>
-            <input type="text" class="form-control" v-model="signUpData.userName" @blur="nameChecker" placeholder="账号" aria-describedby="sizing-addon1">
-        </div>
-        <div class="alert alert-danger" role="alert" v-show="nameWrong">请输入字母或数字格式的昵称</div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-            </span>
-            <input type="password" class="form-control" v-model="signUpData.passWord" @blur="pwdChecker" placeholder="密码" aria-describedby="sizing-addon1">
-        </div>
-        <div class="alert alert-danger" role="alert" v-show="pwdWrong">请输入6~12位字母或数字格式的密码</div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-            </span>
-            <input type="password" class="form-control" v-model="rePassWord" @blur="rePwdChecker" placeholder="确认密码" aria-describedby="sizing-addon1">
-        </div>
-        <div class="alert alert-danger" role="alert" v-show="rePwdWrong">请输入与上面相同的密码</div>
-        <div class="btn-group btn-group-lg btn-sign-in" role="group" aria-label="...">
-            <button type="button" class="btn btn-default" :disabled="disabled" @click="onSubmit">注册</button>
-        </div>
+        <Form ref="form_signup" :model="formValidate" :rules="ruleValidate" :label-width="0">
+            <FormItem label="" prop="account">
+                <Input v-model="formValidate.account" prefix="md-person" size="large" placeholder="账号应为3~9位字母或数字" />
+            </FormItem>
+            <FormItem label="" prop="password">
+                <Input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="密码应为6~16位字母或数字" />
+            </FormItem>
+            <FormItem label="" prop="re_password">
+                <Input v-model="formValidate.re_password" prefix="md-lock" type="password" size="large" placeholder="请再次输入密码" />
+            </FormItem>
+            <FormItem label="" prop="" class="text-center">
+                <Button type="primary" @click="handleSubmit">提交</Button>
+                <Button @click="handleReset" style="margin-left: 8px">重置</Button>
+            </FormItem>
+        </Form>
+
     </div>
 </template>
 
 <script lang="ts">
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
-    import fetch from '../libs/fetch';
-    interface signUpData {
-        userName: string,
-        passWord: string,
-    }
+    import md5 from 'md5';
+
     @Component
     export default class signUp extends Vue {
-        private signUpData: signUpData = {
-            userName: 'zzzzhhhn',
-            passWord: '123456',
+
+        private formValidate = {
+            account: '',
+            password: '',
+            re_password: ''
         };
 
-        private rePassWord: string = '123456';
-        private nameWrong: boolean = false;
-        private  pwdWrong: boolean = false;
-        private  rePwdWrong: boolean = false;
-
-        nameChecker() {
-            if (/^[A-Za-z0-9]+$/.test(this.signUpData.userName) && !!this.signUpData.userName) {
-                this.nameWrong = false;
-            }else {
-                this.nameWrong = true;
-            }
-            return this.nameWrong;
+        private ruleValidate = {
+            account: [
+                {require: true, massage: '账号不能为空'},
+                {pattern: /^[a-zA-Z0-9]{3,9}$/, message: '账号应为3~9位汉字、字母或数字'}
+            ],
+            password: [
+                {require: true, massage: '密码不能为空'},
+                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字'}
+            ],
+            re_password: [
+                {require: true, massage: '密码不能为空'},
+                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字'},
+                {validator: this.valiConfirmPwd, message: '两次输入的密码不一致'}
+            ],
         }
 
-        pwdChecker() {
-            if (/^[A-Za-z0-9]+$/.test(this.signUpData.passWord) && !!this.signUpData.passWord && this.signUpData.passWord.length >= 6 && this.signUpData.passWord.length <= 12) {
-                this.pwdWrong = false;
-            }else {
-                this.pwdWrong = true;
+        valiConfirmPwd(rule: any, value: string, callback: Function) {
+            if (value !== this.formValidate.password) {
+                callback(new Error('两次输入的密码不一致'));
+            } else {
+                callback();
             }
-            return this.pwdWrong;
         }
 
-        rePwdChecker() {
-            if (this.signUpData.passWord === this.rePassWord) {
-                this.rePwdWrong = false;
-            }else {
-                this.rePwdWrong = true;
-            }
-            return this.rePwdWrong;
-        }
-
-        get disabled() {
-            return this.pwdWrong || this.nameWrong || this.rePwdWrong;
-        }
-
-        onSubmit() {
-            if(this.nameChecker() || this.pwdChecker() || this.rePwdChecker()) {
-                return;
-            }
-            fetch('server/main.php', {signUpData: this.signUpData}, (res: any) => {
-                if (res.data.code === 0) {
-                    this.$emit('success');
-                } else if(res.data.code === 1){
-                    alert('已被注册')
-                }else if(res.data.code === 1) {
-                    alert('失败')
+        handleSubmit() {
+            (<Vue>this.$refs.form_signup).validate((result: boolean) => {
+                if (result) {
+                    const password = md5(this.formValidate.password);
+                    window.post('signup', {account: this.formValidate.account, password: password}, (res: any) => {
+                        if (res.error_code === 0) {
+                            this.$Message.success('注册成功');
+                            this.$emit('success');
+                        }else {
+                            this.$Message.error(res.message);
+                        }
+                    })
                 }
-
-            });
+            })
         }
+
+        handleReset() {
+            (<Vue>this.$refs.form_signup).resetFields();
+        }
+
+
+
 
     }
 </script>
 
 
 <style lang="less">
-
+    .app-sign {
+        width: 100%;
+        padding: 10% 20%;
+    }
 </style>

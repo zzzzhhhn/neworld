@@ -1,72 +1,46 @@
 <template>
     <div class="app-sign">
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
-            </span>
-            <input type="text" class="form-control" v-model="signInData.userName" @focus="onClearName" placeholder="账号" aria-describedby="sizing-addon1">
-        </div>
-        <div class="alert alert-danger" role="alert" v-show="nameWrong">账号不存在</div>
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <span class="glyphicon glyphicon-lock"></span>
-            </span>
-            <input type="password" class="form-control" v-model="signInData.passWord" @focus="onClearPwd" placeholder="密码" aria-describedby="sizing-addon1">
-        </div>
-        <div class="alert alert-danger" role="alert" v-show="pwdWrong">密码错误</div>
-        <div class="btn-group btn-group-lg btn-sign-in" role="group" aria-label="...">
-             <button type="button" class="btn btn-default" @click="onSubmit">登录</button>
-        </div>
+        <Form ref="form_signup" :model="formValidate" :label-width="0">
+            <FormItem label="" prop="account">
+                <Input v-model="formValidate.account" prefix="md-lock" size="large" placeholder="请输入账号" />
+            </FormItem>
+            <FormItem label="" prop="password">
+                <Input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="请输入密码" />
+            </FormItem>
+            <FormItem label="" prop="" class="text-center">
+                <Button type="primary" @click="handleSubmit">登录</Button>
+            </FormItem>
+        </Form>
     </div>
 </template>
 
 <script lang="ts">
   import fetch from '../libs/fetch';
-
-    interface signInData {
-        userName: string,
-        passWord: string
-    }
-
-    import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
-    import { Action } from 'vuex-class';
+  import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
+  import { Action } from 'vuex-class';
+  import md5 from 'md5';
 
     @Component
     export default class signIN extends Vue {
 
-        private signInData: signInData = {
-            userName: 'zzzzhhhn',
-            passWord: 'zhnsdsg'
-        };
-
-        private nameWrong: boolean = false;
-        private  pwdWrong: boolean = false;
-        private userData: any;
+    private formValidate = {
+        account: '',
+        password: ''
+    };
 
         @Action('getUserData')
         doGetUserData(val: any){};
 
-        onClearName() {
-            this.nameWrong = false;
-        }
-
-        onClearPwd() {
-            this.pwdWrong = false;
-        }
-
-        onSubmit() {
-            fetch('server/main.php', {signInData: this.signInData}, (res: any) => {
-                if (res.data.code === 0) {
-                    this.userData = res.data.data;
-                    this.doGetUserData(this.userData);
+        handleSubmit() {
+            const password = md5(this.formValidate.password);
+            window.post('signin', {account: this.formValidate.account, password: password}, (res: any) => {
+                if (res.error_code === 0) {
+                    this.doGetUserData(res.data);
                     this.$emit('success');
-                } else if(res.data.code === 1){
-                    this.pwdWrong = true;
-                }else if(res.data.code === -1) {
-                    this.nameWrong = true;
+                } else {
+                    this.$Message.error(res.message);
                 }
-
-            });
+            })
         }
 
     }
