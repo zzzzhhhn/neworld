@@ -19,6 +19,36 @@ export default new Router({
             title: '左拉大世界欢迎您！'
         },
         component: () => import(/* webpackChunkName: "home" */'./views/index.vue'),
+        children: [
+            {
+                path: 'sudoku',
+                meta: {
+                    title: '数独'
+                },
+                component: () => import('./views/sudoku.vue'),
+            },
+            {
+                path: 'tetris',
+                meta: {
+                    title: '俄罗斯方块（单机版）'
+                },
+                component: () => import('./views/tetris.vue'),
+            },
+            {
+                path: 'orcish',
+                meta: {
+                    title: '兽人大战僵尸'
+                },
+                component: () => import('./views/orcish.vue'),
+            },
+            {
+                path: 'monster',
+                meta: {
+                    title: '怪物农场'
+                },
+                component: () => import('./views/monster.vue'),
+            },
+        ]
     }
   ]
 })

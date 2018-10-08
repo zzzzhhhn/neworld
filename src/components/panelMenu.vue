@@ -5,7 +5,7 @@
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
             <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1" @click="onshowLeftMenu('manage')">管理</div>
-            <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.userName ? userData.userName : '游客250'}}</div>
+            <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.nickname ? userData.nickname : '游客250'}}</div>
            
         </div>
         <div class="right-menu-sign"  @click.self="onShowRightMenu()">
@@ -14,8 +14,8 @@
         </div>
         <!--左菜单-->
         <div class="left-menu" :class="{'show-left-menu': showLeftMenu, 'back-left-menu': backLeftMenu, 'sign': currentType === 'sign_in' || currentType === 'sign_up'}">
-            <div class="left-menu-item cursor-pointer" v-for="item in currentMenu" :key="item.mId" @click="onShowMain(item.mId, item.mName)">
-                <router-link :to="item.mUrl || '/'"><span>{{item.mName}}</span></router-link>
+            <div class="left-menu-item cursor-pointer" v-for="item in currentMenu" :key="item.id" @click="onShowMain(item.id, item.name)">
+                <router-link :to="item.url || '/'"><span>{{item.name}}</span></router-link>
             </div>
             <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
             <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
@@ -36,10 +36,11 @@
         <!--下主体-->
         <div class="main" :class="{'show-main': showMain, 'back-main': backMain, 'expand': isExpand}">
             <div class="main-title">
-                <Icon type="ios-undo" class="cursor-pointer" size="20" color="white" v-if="isReading || currentManagePanel !== 'list'" @click.native="onBackToIndex"></Icon>
-                <Icon type="md-contract" class="cursor-pointer" size="20" color="white" v-if="isExpand" @click.native="onContract"></Icon>
-                <Icon type="md-expand" class="cursor-pointer" size="20" color="white" v-if="!isExpand" @click.native="onExpand"></Icon>
-                <Icon type="md-power" size="20" class="cursor-pointer" color="white" @click.native="onHideMain"></Icon>
+                <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="(isReading || currentManagePanel !== 'list') && currentManagePanel !== 'recycle'" @click.native="onBackToIndex"></Icon>
+                <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="currentManagePanel === 'recycle'" @click.native="onBackToNovelMange"></Icon>
+                <Icon type="md-contract" class="cursor-pointer" size="20" color="gray" v-if="isExpand" @click.native="onContract"></Icon>
+                <Icon type="md-expand" class="cursor-pointer" size="20" color="gray" v-if="!isExpand" @click.native="onExpand"></Icon>
+                <Icon type="md-power" size="20" class="cursor-pointer" color="gray" @click.native="onHideMain"></Icon>
             </div>
             <novel-panel v-if="currentType === 'novels' && !isReading" :novelData="novelData" @read="onBeginReading"></novel-panel>
             <game-manage v-show="currentType === 'manage' && manageType === 'game'"></game-manage>
@@ -93,7 +94,7 @@
         private contentData = {};        //章节内容
         private indexData = {};    //章节信息
         private userData = {
-            roleId: ''
+            role_id: ''
         };
         private manageType: string = '';
         private right_right_menu_sign: number = 0;      //右下菜单收起长度
@@ -105,6 +106,7 @@
 
         created() {
             this.doGetMenuList();
+            this.userData = this.getUserData;
         }
 
         mounted() {
@@ -293,6 +295,9 @@
                 }
 
             }
+        }
+        onBackToNovelMange() {
+            (this.$refs.novel_manage as any).changePanel('list');
         }
         /**
          * 切换管理界面

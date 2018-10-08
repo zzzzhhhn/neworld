@@ -38,12 +38,12 @@ export default new Vuex.Store({
       const games: any[] = [];
       const blogs: any[] = [];
       api.getMenuData((data: any) => {
-        data.data.forEach((item: any) => {
-          if (item.type === '1') {
+        data.forEach((item: any) => {
+          if (item.type === 1) {
             novels.push(item);
-          } else if (item.type === '2') {
+          } else if (item.type === 2) {
             games.push(item);
-          } else if (item.type === '3') {
+          } else if (item.type === 3) {
             blogs.push(item);
           }
         });
@@ -53,11 +53,7 @@ export default new Vuex.Store({
       }, params);
 
     },
-    getIndexList({ commit }, params) {
-      api.getIndexData((data: any) => {
-        commit(INDEX_LIST, data.data);
-      }, params);
-    }
+
   },
   getters: {
     listenUserData: state => state.userData,
