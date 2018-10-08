@@ -1,43 +1,48 @@
 <template>
     <div>
         <div class="novel-contain">
-            <div class="novel-img"><img :src="novelData.bookImg" width="200px" height="300px"/></div>
+            <div class="novel-img"><img :src="novelData.img" width="200px" height="300px"/></div>
             <div class="msg-contain">
-                <div class="novel-msg"><span>题材： </span>{{novelData.Theme}}</div>
-                <div class="novel-msg"><span>创作状态： </span>{{novelData.isEnd}}</div>
-                <div class="novel-describe"><div>简介：</div><div class="describe-content">{{novelData.bDescribe}}</div></div>
-                <button type="button" class="btn btn-warning" @click="onBeginReading(novelData.indexes[0])">开始阅读</button>
-                <button type="button" class="btn btn-warning">继续阅读</button>
+                <div class="novel-msg"><span>题材： </span>{{novelData.theme}}</div>
+                <div class="novel-msg"><span>创作状态： </span>{{statusList[novelData.is_end]}}</div>
+                <div class="novel-describe"><div>简介：</div><div class="describe-content">{{novelData.description}}</div></div>
+                <!--<Button type="primary" class="mr20" @click="onBeginReading(novelData.indexes[0])">开始阅读</button>-->
+                <!--<Button type="warning">继续阅读</button>-->
             </div>
         </div>
 
-        <div class="novel-indexes container-fluid">
-            <h3>目录</h3>
-            <div class="indexes-item col-xs-6 col-sm-4 col-md-3 col-lg-2" v-for="item in novelData.indexes" :key="item.iNo" @click="onBeginReading(item)">
-                {{item.iName}}
-            </div>
+        <div class="novel-indexes">
+            <h1>目录</h1>
+          
+            <Tag :color="colors[Math.floor(Math.random() * 16)]" class="tag-catalogs" v-for="item in novelData.catalog" :key="item.id" @click.native="onBeginReading(item)">{{item.name}}</Tag>
         </div>
 
     </div>
 </template>
 
-<script>
-    export default {
-        name: "novel-page",
-        props: {
-            novelData: Object,
-        },
-        methods: {
-            /**
-             * 开始阅读
-             * @param id
-             */
-            onBeginReading(indexObj) {
-                this.$emit('read', indexObj);
-            }
-        }
+<script lang="ts">
+ import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
+    @Component({})
+    export default class panelMenu extends Vue {
+        @Prop({
+            type: Object,
+            default: {}
+        })novelData: any;
+        
+        private colors = ['primary', 'success', 'error', 'warning', 'magenta', 'red', 'volcano', 'orange', 'gold', 'yellow', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+        
+        private statusList =
+            {
+                0: '连载中', 1: '已完结'
+            };
 
+        onBeginReading(indexObj: any) {
+            this.$emit('read', indexObj);
+        }
+         
+        
     }
+
 </script>
 
 <style scoped lang="less">
@@ -65,25 +70,26 @@
                 margin-top: 20px;
                 height: 30px;
                 line-height: 30px;
-                font-size: 20px;
-                color: lightyellow;
+                font-size: 24px;
+                color: #666;
                 text-shadow: 0 0 10px gray;
                 span {
-                    color: lightcyan;
+                    color: #111;
+                    font-size: 30px;
                 }
             }
 
             .novel-describe {
                 width: 80%;
-                font-size: 20px;
-                color: lightcyan;
+                font-size: 30px;
+                color: #111;
                 margin: 20px 0;
                 text-shadow: 0 0 10px gray;
 
                 .describe-content {
                     margin-top: 10px;
-                    font-size: 16px;
-                    color: lightyellow;
+                    font-size: 24px;
+                    color: #666;
                     height: 100px;
                     overflow-y: auto;
                 }
@@ -95,22 +101,16 @@
 
     .novel-indexes {
         padding: 0 10%;
-        color: lightcyan;
-        text-shadow: 0 0 10px gray;
-
-        .indexes-item {
-            color: lightyellow;
+        color: #333;
+        font-size: 20px;
+      
+    }
+.tag-catalogs {
             cursor: pointer;
             height: 30px;
             line-height: 30px;
             text-align: center;
             border-radius: 10px;
             font-size: 20px;
-
-            &:hover {
-                color: lightgoldenrodyellow;
-            }
         }
-    }
-
 </style>

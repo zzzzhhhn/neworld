@@ -84,24 +84,7 @@ export default class orcishGame {
         this._ypyPic.src = require('../../assets/img/orcish/ypy.png');
         this._xzPic = new Image();
         this._xzPic.src = require('../../assets/img/orcish/xz.png');
-        this._game = new Game();
-        this._xz = new Xz(this._ctx2, this._W, this._H, this._xzPic);
-        this._zb = new Zb(this._ctx2, this._W, this._H, this._zbPic);
-        this._sz = new Sz(this._ctx2, this._W, this._H, this._szPic);
-        this._ypy = new Ypy(this._ctx2, this._W, this._H, this._ypyPic);
-        this._ypr = new Ypr(this._ctx2, this._W, this._H, this._yprPic);
-        this._fz = new Fz(this._ctx2, this._W, this._H, this._fzPic);
-        this._sr = new Sr(this._ctx2, this._W, this._H, this._srPicl, this._srPicr);
-        this._js = new Js(this._ctx2, this._W, this._H, this._game, this._jsPic);
-        this._seed = new Seed(this._ctx2, this._sr);
-        this._boss1 = new Boss1(this._ctx2, this._W, this._H, this._boss1lPic, this._boss1rPic, this._sr);
-        this._boss2 = new Boss2(this._ctx2, this._W, this._H, this._boss2lPic, this._boss2rPic, this._sr);
-        this._seed1 = new Seed1(this._ctx2, this._boss2);
-        this._data = new Data(this._ctx2,this._js, this._boss1, this._boss2, this._seed, this._boss1lPic[0].width, this._boss1lPic[0].height, this._boss2lPic[0].width, this._boss2lPic[0].height,
-            this._xz, this._ypr, this._zb, this._fz, this._sz, this._ypy, this._jsPic[0].width,this._jsPic[0].height, this._srPicl[0].width, this._srPicl[0].height, this._sr, this._seed1, this._game);
-
-
-        for (let i = 0; i < 4; i++) {
+                for (let i = 0; i < 4; i++) {
             this._srPicl[i] = new Image();
             this._srPicl[i].src = require('../../assets/img/orcish/srl' + i + '.png');
         }
@@ -129,6 +112,24 @@ export default class orcishGame {
             this._boss2rPic[i] = new Image();
             this._boss2rPic[i].src = require('../../assets/img/orcish/boss2r' + i + '.png');
         }
+
+        this._game = new Game();
+        this._xz = new Xz(this._ctx2, this._W, this._H, this._xzPic);
+        this._zb = new Zb(this._ctx2, this._W, this._H, this._zbPic);
+        this._sz = new Sz(this._ctx2, this._W, this._H, this._szPic);
+        this._ypy = new Ypy(this._ctx2, this._W, this._H, this._ypyPic);
+        this._ypr = new Ypr(this._ctx2, this._W, this._H, this._yprPic);
+        this._fz = new Fz(this._ctx2, this._W, this._H, this._fzPic);
+        this._sr = new Sr(this._ctx2, this._W, this._H, this._srPicl, this._srPicr);
+        this._js = new Js(this._ctx2, this._W, this._H, this._game, this._jsPic);
+        this._seed = new Seed(this._ctx2, this._sr);
+        this._boss1 = new Boss1(this._ctx2, this._W, this._H, this._boss1lPic, this._boss1rPic, this._sr);
+        this._boss2 = new Boss2(this._ctx2, this._W, this._H, this._boss2lPic, this._boss2rPic, this._sr);
+        this._seed1 = new Seed1(this._ctx2, this._boss2);
+        this._data = new Data(this._ctx2,this._js, this._boss1, this._boss2, this._seed, this._boss1lPic[0].width, this._boss1lPic[0].height, this._boss2lPic[0].width, this._boss2lPic[0].height,
+            this._xz, this._ypr, this._zb, this._fz, this._sz, this._ypy, this._jsPic[0].width,this._jsPic[0].height, this._srPicl[0].width, this._srPicl[0].height, this._sr, this._seed1, this._game);
+
+
     }
 
     start() {

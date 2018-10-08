@@ -30,14 +30,14 @@
     @Component
     export default class Orcish extends Vue {
 
-        private _orcish: OrcishGame;
+        private _orcish: OrcishGame|null = null;
 
         constructor() {
             super();
-            this._orcish = new OrcishGame();
+           
         }
         mounted() {
-
+            this._orcish = new OrcishGame();
             this.start();
             setTimeout(() => {
                 $('.rule').addClass('hide-rule');
@@ -45,12 +45,16 @@
         }
 
         start() {
-            this._orcish.start();
-            $(".btn-orcish").blur();
+            if (this._orcish) {
+                this._orcish.start();
+                $(".btn-orcish").blur();
+            }
         }
 
         end() {
-            this._orcish.end();
+            if (this._orcish) {
+                this._orcish.end();
+            }
         }
 
         showRule() {
@@ -71,37 +75,5 @@
     .games-contain {
         position: relative;
     }
-   .content {
-       width: 1200px;
-       height: 800px;
-       position: relative;
-       margin: 0 auto;
-       }
-       #canvas1,#canvas2 {
-           position: absolute;
-           left: 0px;
-           bottom: 0px;
-           z-index: 0;
-       }
-       #canvas2 {
-           z-index: 1;
-       }
-       .rule {
-           position: absolute;
-           left: 0;
-           top: 0;
-           width: 250px;
-           height: auto;
-           min-height: 800px;
-           background-color: yellow;
-           padding: 10px 10px;
-           font-size: 16px;
-           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-           color: #67b168;
-           transition: left 0.3s ease;
-
-           &.hide-rule {
-               left: -240px;
-           }
-       }
+   
 </style>

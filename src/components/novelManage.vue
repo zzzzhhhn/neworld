@@ -82,8 +82,7 @@
 
     </div>
     <div v-else-if="currentPanel === 'content'" class="text-center">
-        <div id="toolbar"></div>
-        <div id="editor" style="height:600px;"></div>
+        <div ref="editor" style="text-align:left"></div>
         <div class="mt20">
             <Button type="primary" style="width:200px" @click="addContentData">保存</Button>
         </div>
@@ -323,6 +322,11 @@ export default class novelManage extends Vue {
      */
     changePanel(val: string) {
         this.currentPanel = val;
+        if(this.editor) {
+            this.editor.txt.clear();
+            $('.w-e-text-container').remove();
+            $('.w-e-toolbar').remove();
+        }
         if (val === 'list') {
             this.doGetMenuList();
         }
@@ -341,11 +345,12 @@ export default class novelManage extends Vue {
                 this.$Message.error(res.message);
             }
             this.$nextTick(() => {
-                this.editor = new E('#toolbar', '#editor');
+                this.editor = new E(this.$refs.editor);
+                this.editor.customConfig.onchange = (html: any) => {
+                  this.contentData.content = html
+                }
                 this.editor.create();
-                this.editor.txt.html(
-                    '<p>' + this.contentData.content + '用 JS 设置的内容</p>'
-                );
+                this.editor.txt.html(this.contentData.content);
             });
         });
     }
@@ -354,7 +359,7 @@ export default class novelManage extends Vue {
      * 保存内容
      */
     addContentData() {
-        this.contentData.content = this.editor.txt.html();
+        // this.contentData.content = this.editor.txt.html();
         window.post('chapter_update', this.contentData, (res: any) => {
             if (res.error_code === 0) {
                 this.$Message.success('保存成功');

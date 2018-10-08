@@ -28,16 +28,23 @@
 
     @Component
     export default class Tetris extends Vue {
-        private _tetrisGame: TetrisGame;
+        private _tetrisGame: TetrisGame | null = null;
+
         constructor() {
             super();
+
+        }
+
+        mounted() {
             this._tetrisGame = new TetrisGame();
             this._tetrisGame.start();
         }
 
         reStart() {
-            this._tetrisGame.reStart();
-            $(".btn-tetris").blur();
+            if (this._tetrisGame) {
+                this._tetrisGame.reStart();
+                $(".btn-tetris").blur();
+            }
         }
 
     }

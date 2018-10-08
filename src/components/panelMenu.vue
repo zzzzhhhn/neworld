@@ -46,7 +46,7 @@
             <game-manage v-show="currentType === 'manage' && manageType === 'game'"></game-manage>
             <novel-manage ref="novel_manage" v-show="currentType === 'manage' && manageType === 'novel'" @panel="getManagePanel"></novel-manage>
             <div class="novel-content" v-if="isReading">
-                {{contentData.content}}
+                <div v-html="contentData.content"></div>
             </div>
             <router-view></router-view>
         </div>
@@ -63,7 +63,6 @@
     import novelManage from './novelManage.vue';
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import { Getter, Action} from 'vuex-class';
-
 
     @Component({
         components: {
@@ -160,7 +159,7 @@
          * 显示左侧菜单
          * @param type
          */
-        onshowLeftMenu(type: string) {console.log(1)
+        onshowLeftMenu(type: string) {
             if(type !== this.tempType && this.showLeftMenu) {
                 this.showLeftMenu = false;
                 this.backLeftMenu = false;
@@ -205,14 +204,14 @@
         onShowMain(id: string, name: string) {
             this.currentTitle = name;
             if(this.currentType === 'novels') {
-                // fetch('server/main.php', {novels: id}, (res: any) => {
-                //     if (res.data.code === 0) {
-                //         this.novelData = res.data.data;
-                //     } else {
-                //         console.error('couldn`t get novels data');
-                //     }
-                //
-                // });
+                window.post('novel', {id: id}, (res: any) => {
+                if (res.error_code === 0) {
+                    this.novelData = res.data;
+                } else {
+                    this.$Message.error(res.message);
+                }
+            });
+
             }else if(id === 'manage') {
                 this.manageType = name;
                 if(name === 'novel') {
@@ -273,14 +272,14 @@
         onBeginReading(obj: any) {
             this.isReading = true;
             this.indexData = obj;
-            // fetch('server/main.php', {index: obj.iNo}, (res: any) => {
-            //     if (res.data.code === 0) {
-            //         this.contentData = res.data.data;
-            //     } else {
-            //         console.error('couldn`t get content data');
-            //     }
-            //
-            // });
+        
+            window.post('chapter', {id: obj.id}, (res: any) => {
+                if (res.error_code === 0) {
+                   this.contentData = res.data;
+                } else {
+                    this.$Message.error(res.message);
+                }
+            });
         }
         /**
          * 回到目录页
@@ -429,7 +428,7 @@
 
             &.sign {
                 background: url("../assets/img/left1.png") no-repeat;
-                background-size: contain;
+                background-size: cover;
             }
 
             &.show-left-menu {

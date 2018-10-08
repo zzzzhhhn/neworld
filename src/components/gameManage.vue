@@ -16,7 +16,7 @@
         </Row>
 
         <Button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addGameData">新增</Button>
-        <Button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</Button>
+        <!--<Button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</Button>-->
     </div>
 </template>
 
@@ -76,6 +76,18 @@
                 url: ''
             });
         }
+        /**
+     * 回收站
+     */
+    // showDeletedNovels() {
+    //     window.post('menu_recycle_list', {type: 1}, (res: any) => {
+    //         if (res.error_code === 0) {
+    //             this.recycleList = res.data;
+    //         } else {
+    //             this.$Message.error('获取数据失败');
+    //         }
+    //     });
+    // }
 
         /**
          * 删除

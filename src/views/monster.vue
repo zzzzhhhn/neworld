@@ -19,20 +19,27 @@
     import MonsterGame from '../gameClasses/monster/main';
     @Component
     export default class Monster extends Vue {
-        private _game: MonsterGame;
+        private _game: MonsterGame|null = null;
 
         constructor() {
             super();
+        }
+
+        mounted() {
             this._game = new MonsterGame();
             this._game.start();
         }
 
         start() {
-            this._game.start();
+            if (this._game) {
+                this._game.start();
+            }
         }
 
         end() {
-            this._game.end();
+            if (this._game) {
+                this._game.end();
+            }
         }
 
         destroyed() {
