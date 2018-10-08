@@ -1,22 +1,22 @@
 <template>
     <div class="container">
-        <div class="row mb20" v-for="(item, index) in gameList" :key="index">
-            <div class="col-xs-5 input-group input-group-lg pull-left" style="padding-right: 10px">
-                <span class="input-group-addon">名称</span>
-                <input class="form-control" v-model="item.mName"/>
-            </div>
-            <div class="col-xs-5 input-group input-group-lg pull-left" style="padding-left: 10px">
-                <span class="input-group-addon">路径</span>
-                <input class="form-control" v-model="item.mUrl"/>
-            </div>
-            <div class="col-xs-2 btn-group btn-group-lg">
-                <button class="btn btn-warning" @click="updateGameData(item)">保存</button>
-                <button class="btn btn-danger" @click="deleteGameData(item.mId)">删除</button>
-            </div>
-        </div>
-        <div class="row btn-group btn-group-lg">
-            <button class="btn btn-primary" @click="addGameData">新增</button>
-        </div>
+        <Row class="mb20 pl20" v-for="(item, index) in gameList" :key="index">
+            <Col span="8">
+                <Input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入游戏名称" />
+            </Col>
+            <Col span="8" class="pl20">
+                <Input v-model="item.url" prefix="ios-book" size="large" placeholder="请输入游戏url" />
+            </Col>
+            <Col span="8" class="pl20">
+            <ButtonGroup size="large">
+                <Button type="success" class="ml20" @click="updateGameData(item)">保存</Button>
+                <Button type="warning" class="ml20" @click="deleteGameData(item.id)">删除</Button>
+            </ButtonGroup>
+            </Col>
+        </Row>
+
+        <Button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addGameData">新增</Button>
+        <Button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</Button>
     </div>
 </template>
 
@@ -26,10 +26,10 @@
     import { Getter, Action} from 'vuex-class';
 
     interface listType {
-        mId: number,
-        mName: string,
-        mType: number,
-        mUrl: string
+        id: number;
+        name: string;
+        type: number;
+        url: string;
     }
 
     @Component
@@ -48,12 +48,19 @@
          * @param {listType} data
          */
         updateGameData(data: listType) {
-            fetch('server/main.php', {menuData: data}, (res: any) => {
-                if (res.data.code === 0) {
-                    alert('保存成功');
+            let post_url = '';
+            if (!data.id) {
+                post_url = 'menu_create';
+
+            } else {
+                post_url = 'menu_update';
+            }
+            window.post(post_url, data, (res: any) => {
+                if (res.error_code === 0) {
+                    this.$Message.success('保存成功');
                     this.doGetMenuList();
                 } else {
-                    alert('保存失败');
+                    this.$Message.error('保存失败');
                 }
             });
         }
@@ -63,10 +70,10 @@
          */
         addGameData() {
             this.gameList.push({
-                mId: 0,
-                mName: '',
-                mType: 2,
-                mUrl: ''
+                id: 0,
+                name: '',
+                type: 2,
+                url: ''
             });
         }
 
@@ -74,11 +81,19 @@
          * 删除
          */
         deleteGameData(id: number) {
-            fetch('server/main.php', {menuId: id}, (res: any) => {
-                if (res.data.code === 0) {
-                   this.doGetMenuList();
+            this.$Modal.confirm({
+                title: '删除', content: '确定要删除吗？', onOk: () => {
+                    this.doDelete(id)
+                }
+            });
+        }
+        doDelete(id: number) {
+            window.post('menu_delete', {id: id}, (res: any) => {
+                if (res.error_code === 0) {
+                    this.$Message.success('删除成功');
+                    this.doGetMenuList();
                 } else {
-                    alert('删除失败');
+                    this.$Message.error('删除失败');
                 }
             });
         }

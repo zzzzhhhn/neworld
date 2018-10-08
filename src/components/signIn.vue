@@ -36,6 +36,7 @@
             window.post('signin', {account: this.formValidate.account, password: password}, (res: any) => {
                 if (res.error_code === 0) {
                     this.doGetUserData(res.data);
+                    sessionStorage.setItem('zw_token', res.data.token);
                     this.$emit('success');
                 } else {
                     this.$Message.error(res.message);
