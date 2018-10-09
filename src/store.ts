@@ -7,10 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userData: {},
-    gameList: {},
-    novelList: {},
-    blogList: {},
-    indexList: {}
+    gameList: [],
+    novelList: [],
+    blogList: [],
   },
   mutations: {
     USER_DATA(state, data) {
@@ -25,9 +24,7 @@ export default new Vuex.Store({
     BLOG_LIST(state, data) {
       state.blogList = data;
     },
-    INDEX_LIST(state, data) {
-      state.indexList = data;
-    }
+
   },
   actions: {
     getUserData({ commit }, data) {
@@ -39,11 +36,11 @@ export default new Vuex.Store({
       const blogs: any[] = [];
       api.getMenuData((data: any) => {
         data.forEach((item: any) => {
-          if (item.type === 1) {
+          if (item.type == 1) {
             novels.push(item);
-          } else if (item.type === 2) {
+          } else if (item.type == 2) {
             games.push(item);
-          } else if (item.type === 3) {
+          } else if (item.type == 3) {
             blogs.push(item);
           }
         });
@@ -60,7 +57,6 @@ export default new Vuex.Store({
     listenGameList: state => state.gameList,
     listenNovelList: state => state.novelList,
     listenBlogList: state => state.blogList,
-    listenIndexList: state => state.indexList
   }
 })
 
@@ -69,4 +65,3 @@ const USER_DATA = 'USER_DATA';
 const GAME_LIST = 'GAME_LIST';
 const NOVEL_LIST = 'NOVEL_LIST';
 const BLOG_LIST = 'BLOG_LIST';
-const INDEX_LIST = 'INDEX_LIST';
