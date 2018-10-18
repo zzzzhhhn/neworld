@@ -3,13 +3,13 @@
         <!--九宫格-->
         <div class="container-sudoku grid" id="container"></div>
         <!--按钮组-->
-        <div class="dashboard" id="dashboard">
-            <div class="buttons">
-                <button id="check" title="点击查看结果，错误位置会标记为粉色">检查</button>
-                <button id="reset" title="点击重置本局游戏">重置</button>
-                <button id="clear" title="点击清理错误标记">清理</button>
-                <button id="rebuild" title="点击重建一局新游戏">重建</button>
-            </div>
+        <div id="dashboard">
+            <ButtonGroup class="w100 suduku-btn-group" size="large">
+                <Button id="check" title="点击查看结果，错误位置会标记为粉色">检查</button>
+                <Button id="reset" title="点击重置本局游戏">重置</button>
+                <Button id="clear" title="点击清理错误标记">清理</button>
+                <Button id="rebuild" title="点击重建一局新游戏">重建</button>
+            </ButtonGroup>
         </div>
         <!--弹出面板-->
         <div id="popupNumbers" class="grid popup-num hidden">
@@ -54,6 +54,10 @@
         user-select:none;
         max-width: 450px;
         position: relative;
+
+        .suduku-btn-group button {
+            width: 25%;
+        }
 
     >* {
         max-width: 450px;
@@ -171,31 +175,7 @@
             }
         }
 
-        .dashboard {
-            width: 100%;
-            background: steelblue;
-            box-sizing: border-box;
-            box-shadow: @shadowTop;
-            height: 3rem;
-
-            .buttons {
-
-                button {
-                    float: left;
-                    width: 25%;
-                    height: 3rem;
-                    font-size: 1.3rem;
-                    color: white;
-                    border: 1px solid #ccc;
-                    background: transparent;
-                    border-right-width: 0;
-                    font-family: 'Consolas', '微软雅黑';
-                    &:last-child {
-                        border-right-width: 1px;
-                    }
-                }
-            }
-        }
+        
     }
 
 </style>

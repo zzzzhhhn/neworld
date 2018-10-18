@@ -1,14 +1,14 @@
 <template>
     <div class="app-sign">
         <Form ref="form_signup" :model="formValidate" :label-width="0">
-            <FormItem label="" prop="account">
+            <FormItem label="" prop="account" class="mb30">
                 <Input v-model="formValidate.account" prefix="md-lock" size="large" placeholder="请输入账号" />
             </FormItem>
-            <FormItem label="" prop="password">
+            <FormItem label="" prop="password" class="mb30">
                 <Input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="请输入密码" />
             </FormItem>
             <FormItem label="" prop="" class="text-center">
-                <Button type="primary" @click="handleSubmit">登录</Button>
+                <Button type="primary" @click="handleSubmit" long size="large">登录</Button>
             </FormItem>
         </Form>
     </div>

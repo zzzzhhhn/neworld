@@ -14,10 +14,11 @@
             </div>
             <!--游戏区-->
             <div class="panel-game" id="panel-local"></div>
+            <div class="text-center mt10">
+            <Button long type="warning" size="large" class="btn-tetris" @click="reStart">重新开始</Button>
         </div>
-        <div class="text-center mt10">
-            <button class="btn btn-warning btn-lg btn-tetris" @click="reStart">重新开始</button>
         </div>
+        
         <h5><a href="https://github.com/zzzzhhhn/tetris.git">基于nodeJS + socket.io + typescript + gulp + webpack 的联机版俄罗斯方块在这里！</a></h5>
     </div>
 </template>
@@ -42,7 +43,9 @@
 
         reStart() {
             if (this._tetrisGame) {
-                this._tetrisGame.reStart();
+                this._tetrisGame.stop();
+                this._tetrisGame = new TetrisGame();
+            this._tetrisGame.start();
                 $(".btn-tetris").blur();
             }
         }

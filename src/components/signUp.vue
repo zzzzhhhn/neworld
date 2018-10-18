@@ -1,18 +1,21 @@
 <template>
     <div class="app-sign">
         <Form ref="form_signup" :model="formValidate" :rules="ruleValidate" :label-width="0">
-            <FormItem label="" prop="account">
+            <FormItem label="" prop="account" class="mb30">
                 <Input v-model="formValidate.account" prefix="md-person" size="large" placeholder="账号应为3~9位字母或数字" />
             </FormItem>
-            <FormItem label="" prop="password">
+            <FormItem label="" prop="password" class="mb30">
                 <Input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="密码应为6~16位字母或数字" />
             </FormItem>
-            <FormItem label="" prop="re_password">
+            <FormItem label="" prop="re_password" class="mb30">
                 <Input v-model="formValidate.re_password" prefix="md-lock" type="password" size="large" placeholder="请再次输入密码" />
             </FormItem>
             <FormItem label="" prop="" class="text-center">
-                <Button type="primary" @click="handleSubmit">提交</Button>
-                <Button @click="handleReset" style="margin-left: 8px">重置</Button>
+              <ButtonGroup size="large" class="w100">
+                <Button type="primary" @click="handleSubmit" class="w50">提交</Button>
+                <Button @click="handleReset" class="w50">重置</Button>
+              </ButtonGroup>
+
             </FormItem>
         </Form>
 

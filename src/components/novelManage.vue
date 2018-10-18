@@ -128,7 +128,7 @@ interface chapterType {
 @Component
 export default class novelManage extends Vue {
     private novelList: listType[] = [];
-    private currentPanel = 'list';
+    private currentPanel = 'content';
     private url: string = url;
     private postInfo: any = {};
     private themeList: string[] = [
@@ -331,28 +331,30 @@ export default class novelManage extends Vue {
             this.doGetMenuList();
         }
     }
-
-    /**
+mounted() {
+        this.novelContentManage(1);
+}
+     /**
      * 内容管理
      */
     novelContentManage(id: number) {
-        window.post('chapter', {id: id}, (res: any) => {
-            if (res.error_code === 0) {
-                this.contentData = res.data;
-                this.currentPanel = 'content';
-                this.$emit('panel', 'content');
-            } else {
-                this.$Message.error(res.message);
-            }
-            this.$nextTick(() => {
+//        window.post('chapter', {id: id}, (res: any) => {
+//            if (res.error_code === 0) {
+//                this.contentData = res.data;
+//                this.currentPanel = 'content';
+//                this.$emit('panel', 'content');
+//            } else {
+//                this.$Message.error(res.message);
+//            }
+//            this.$nextTick(() => {
                 this.editor = new E(this.$refs.editor);
                 this.editor.customConfig.onchange = (html: any) => {
                   this.contentData.content = html
                 }
                 this.editor.create();
                 this.editor.txt.html(this.contentData.content);
-            });
-        });
+//            });
+//        });
     }
 
     /**

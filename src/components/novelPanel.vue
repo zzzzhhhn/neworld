@@ -71,8 +71,7 @@
                 height: 30px;
                 line-height: 30px;
                 font-size: 24px;
-                color: #666;
-                text-shadow: 0 0 10px gray;
+                color: gray;
                 span {
                     color: #111;
                     font-size: 30px;
@@ -84,12 +83,11 @@
                 font-size: 30px;
                 color: #111;
                 margin: 20px 0;
-                text-shadow: 0 0 10px gray;
 
                 .describe-content {
                     margin-top: 10px;
                     font-size: 24px;
-                    color: #666;
+                    color: gray;
                     height: 100px;
                     overflow-y: auto;
                 }

@@ -4,19 +4,24 @@
         <div class="right-menu" >
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
             <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
-            <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1" @click="onshowLeftMenu('manage')">管理</div>
+            <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1 || true" @click="onshowLeftMenu('manage')">管理</div>
             <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.nickname ? userData.nickname : '游客250'}}</div>
-           
+
         </div>
         <div class="right-menu-sign"  @click.self="onShowRightMenu()">
             <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_in')">登录</div>
             <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_up')">注册</div>
         </div>
         <!--左菜单-->
-        <div class="left-menu" :class="{'show-left-menu': showLeftMenu, 'back-left-menu': backLeftMenu, 'sign': currentType === 'sign_in' || currentType === 'sign_up'}">
-            <div class="left-menu-item cursor-pointer" v-for="item in currentMenu" :key="item.id" @click="onShowMain(item.id, item.name)">
-                <router-link :to="item.url || '/'"><span>{{item.name}}</span></router-link>
-            </div>
+        <div class="left-menu" :class="{'show-left-menu': showLeftMenu, 'back-left-menu': backLeftMenu}">
+            <span  v-for="item in currentMenu" :key="item.id">
+                <router-link :to="item.url || '/'">
+                    <div class="left-menu-item cursor-pointer" @click="onShowMain(item.id, item.name)">
+                        <span>{{item.name}}</span>
+                    </div>
+                </router-link>
+            </span>        
+           
             <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
             <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
 
@@ -112,7 +117,6 @@
             this.rightMenuResize();
             window.onresize = () => {
                 this.rightMenuResize();
-                this.leftMenuItemResize();
             };
 
         }
@@ -128,11 +132,7 @@
             $('.right-menu').css('top', this.top_right_menu);
             $('.right-menu-sign').css('right', this.right_right_menu_sign);
         }
-        leftMenuItemResize() {
-            const width_left_item: number|undefined = $('.left-menu-item').width() || 0;
-            $('.left-menu-item').height(width_left_item * 606 /107);
-            $('.left-menu-item').css('font-size', width_left_item / 3 + 'px');
-        }
+
         /**
          * 显示面板
          */
@@ -160,6 +160,9 @@
          * @param type
          */
         onshowLeftMenu(type: string) {
+//            if (['sign_in', 'sign_up'].indexOf(type) !== -1) {
+//                return this.$Message.info('暂未开放');
+//            }
             if(type !== this.tempType && this.showLeftMenu) {
                 this.showLeftMenu = false;
                 this.backLeftMenu = false;
@@ -168,7 +171,6 @@
                     setTimeout(() => {
                         this.currentMenu = this.menuLists[type];
                         this.$nextTick(() => {
-                            this.leftMenuItemResize();
                             this.showLeftMenu = true;
                             setTimeout(() => {
                                 this.backLeftMenu = true;
@@ -183,7 +185,6 @@
                 this.tempType = type;
                 this.currentMenu = this.menuLists[type];
                 this.$nextTick(() => {
-                    this.leftMenuItemResize();
                     this.showLeftMenu = true;
                     setTimeout(() => {
                         this.backLeftMenu = true;
@@ -244,12 +245,9 @@
             this.isReading = false;
             setTimeout(() => {
                 this.showLeftMenu = true;
-                this.showRightMenu = true;
-                // this.showRightMenuSign = true;
+                this.onShowRightMenu();
                 setTimeout(() => {
                     this.backLeftMenu = true;
-                    // this.backRightMenu = true;
-                    // this.backRightMenuSign = true;
                 }, 500);
             },500);
         }
@@ -272,7 +270,7 @@
         onBeginReading(obj: any) {
             this.isReading = true;
             this.indexData = obj;
-        
+
             window.post('chapter', {id: obj.id}, (res: any) => {
                 if (res.error_code === 0) {
                    this.contentData = res.data;
@@ -338,232 +336,231 @@
     @panel_color: black;
     @panel_opacity: .6;
     @panel_right_color: #333;
-    @font-face {
-        font-family: panel_font;
-        src: url("../assets/font/2.ttf");
+
+    @keyframes bgcolor
+    {
+      from { background-color: transparent }
+      to { background-color: black}
     }
+
+    @keyframes color {
+      from { color: gray }
+      to { color: black}
+    }
+
     .zora-world {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+
+
+      font-family: "Microsoft YaHei";
+      background-image: radial-gradient(circle at 80% 80%, transparent 0, black 50%);
+      animation: bgcolor 5s infinite alternate;
+
+      .right-menu {
+        width: 20%;
+        position: absolute;
+        right: 20px;
+        transition: top .5s ease-out;
+        background: rgba(200,200,200,.4);
+        border-radius: 0 0 4px 4px;
+
+        color: white;
+
+        .user-name {
+          width: 100%;
+          height: 10%;
+          position: absolute;
+          bottom: 0;
+          text-align: center;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          animation: color 5s infinite alternate;
+        }
+      }
+
+      .right-menu-sign {
+        width: 21%;
+        position: absolute;
+        bottom: 10%;
+        transition: right .5s ease-out;
+
+        background: rgba(200,200,200,.4);
+        border-radius: 4px 0 0 4px;
+
+        .right-menu-item.right-menu-sign-item {
+          width: 40%;
+          height: 100%;
+          float: left;
+          writing-mode: vertical-rl;
+
+          &:first-child {
+            margin-left: 10%;
+          }
+        }
+      }
+
+      .right-menu-item {
         width: 100%;
-        height: 100%;
-        position: relative;
-        overflow: hidden;
-        background-image: url("../assets/img/bg.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        font-family: panel_font;
+        height: 20%;
+        font-size: 30px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .right-menu {
-            width: 20%;
-            position: absolute;
-            right: 20px;
-            transition: top .5s ease-out;
-            background: url('../assets/img/right1.png') no-repeat;
-            background-size: contain;
-            opacity: @panel_opacity;
+        &:hover {
+          color: gray;
+        }
+      }
 
-            color: white;
+      .left-menu {
+        width: 75%;
+        height: 80%;
+        padding: 20px;
+        position: absolute;
+        left: -80%;
+        top: 10%;
+        transition: left .5s ease-out;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: flex;
+        flex-direction: row;
+        border-radius: 0 4px 4px 0;
+        background: rgba(200,200,200,.4);
 
-            .user-name {
-                width: 100%;
-                height: 10%;
-                position: absolute;
-                bottom: 0;
-                text-align: center;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+        &.show-left-menu {
+          left: 0;
         }
 
-        .right-menu-sign {
-            width: 21%;
-            position: absolute;
-            bottom: 10%;
-            transition: right .5s ease-out;
-
-            background: url(../assets/img/right2.png) no-repeat;
-            background-size: contain;
-            opacity: @panel_opacity;
-
-            .right-menu-item.right-menu-sign-item {
-                width: 40%;
-                height: 100%;
-                float: left;
-                writing-mode: vertical-rl;
-
-                &:first-child {
-                    margin-left: 10%;
-                }
-            }
+        &.back-left-menu {
+          transition: top .1s ease-out;
+          left: -10px;
         }
 
-        .right-menu-item {
+        .btn-manage {
+          width: 50%;
+          margin: 75px 25% 0;
+
+          button {
             width: 100%;
-            height: 20%;
-            font-size: 30px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            &:hover {
-                color: lightslategrey;
-            }
+          }
         }
 
-        .left-menu {
-            width: 75%;
-            height: 80%;
-            padding: 20px;
-            position: absolute;
-            left: -80%;
-            top: 10%;
-            transition: left .5s ease-out;
-            border-radius: 10px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            display: flex;
-            flex-direction: row;
+        .left-menu-item {
+          width: 100px;
+          min-width: 100px;
+          height: 100%;
+          writing-mode: vertical-rl;
+          opacity: .7;
+          margin-right: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: gray;
+          font-size: 20px;
+          border-radius: 4px;
+          color: #333;
 
-            &.sign {
-                background: url("../assets/img/left1.png") no-repeat;
-                background-size: cover;
-            }
+          &:hover {
+            opacity: .8;
+            color: lightgray;
+          }
 
-            &.show-left-menu {
-                left: 0;
-            }
-
-            &.back-left-menu {
-                transition: top .1s ease-out;
-                left: -10px;
-            }
-
-            .btn-manage {
-                width: 50%;
-                margin: 75px 25% 0;
-
-                button {
-                    width: 100%;
-                }
-            }
-
-            .left-menu-item {
-                width: 9%;
-                writing-mode: vertical-rl;
-                opacity: .7;
-                margin-right: 1%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: url('../assets/img/zhu2.png') no-repeat;
-                background-size: contain;
-
-                a {
-                    color: #333;
-                }
-
-                &:hover {
-                    opacity: .8;
-                }
-
-                a:hover {
-                    text-decoration: none;
-                
-                }
-            }
         }
+      }
 
-        .top-title {
-            width: 50%;
+      .top-title {
+        width: 50%;
+        height: 10%;
+        position: absolute;
+        left: 25%;
+        top: -10%;
+        transition: top .5s ease-out;
+        background: rgba(200,200,200,.4);
+        border-radius: 0 0 4px 4px;
+        padding: 1%;
+        font-size: 40px;
+        font-weight: bold;
+        line-height: 150%;
+        text-align: center;
+        color: #222;
+        text-shadow: 2px 2px 10px gray;
+
+        .novel-msg {
+
+          .index-title {
             height: 10%;
-            position: absolute;
-            left: 25%;
-            top: -10%;
-            transition: top .5s ease-out;
-            background: url("../assets/img/wood.jpg");
-            opacity: @panel_opacity;
-            border-radius: 0 0 50px 50px;
-            padding: 1%;
-            font-size: 40px;
-            font-weight: bold;
-            line-height: 150%;
-            text-align: center;
-            color: #222;
-            text-shadow: 2px 2px 10px palegoldenrod;
+            font-size: 25px;
+            line-height: 200%;
+          }
 
-            .novel-msg {
-
-                .index-title {
-                    height: 10%;
-                    font-size: 25px;
-                    line-height: 200%;
-                }
-
-                .index-msg {
-                    height: 3%;
-                    font-size: 15px;
-                    line-height: 34%;
-                    color: #ffffe0;
-                }
-            }
-
-            &.show-title {
-                top: 0;
-            }
-
-            &.back-title {
-                transition: top .1s ease-out;
-                top: -10px;
-            }
+          .index-msg {
+            height: 3%;
+            font-size: 15px;
+            line-height: 34%;
+            color: #ffffe0;
+          }
         }
 
-        .main {
-            width: 90%;
-            height: 89%;
-            position: absolute;
-            left: 5%;
-            bottom: -89%;
-            transition: all .5s ease-out;
-            overflow-y: auto;
-
-            background: url("../assets/img/sc.jpg");
-            background-size: contain;
-            color: white;
-            opacity: .9;
-            border-radius: 10px;
-
-            &.show-main {
-                bottom: 0;
-            }
-
-            &.back-main {
-                transition: all .1s ease-out;
-                bottom: -10px;
-            }
-
-            &.expand {
-                width: 100%;
-                height: 100%;
-                left: 0;
-                top: 0;
-                opacity: 1;
-            }
-
-            .main-title {
-                width: 100%;
-                height: auto;
-                text-align: right;
-                padding: 10px 20px;
-            }
-
-            .novel-content {
-                padding: 20px;
-                font-size: 16px;
-                font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-                color: olivedrab;
-            }
+        &.show-title {
+          top: 0;
         }
+
+        &.back-title {
+          transition: top .1s ease-out;
+          top: -10px;
+        }
+      }
+
+      .main {
+        width: 90%;
+        height: 89%;
+        position: absolute;
+        left: 5%;
+        bottom: -89%;
+        transition: all .5s ease-out;
+        overflow-y: auto;
+
+        background: rgba(200,200,200,.4);
+        color: white;
+        opacity: .9;
+        border-radius: 10px;
+
+        &.show-main {
+          bottom: 0;
+        }
+
+        &.back-main {
+          transition: all .1s ease-out;
+          bottom: -10px;
+        }
+
+        &.expand {
+          width: 100%;
+          height: 100%;
+          left: 0;
+          top: 0;
+          opacity: 1;
+        }
+
+        .main-title {
+          width: 100%;
+          height: auto;
+          text-align: right;
+          padding: 10px 20px;
+        }
+
+        .novel-content {
+          padding: 20px;
+          font-size: 16px;
+          font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+          color: olivedrab;
+        }
+      }
     }
 </style>

@@ -14,9 +14,8 @@ export default class TetrisGame {
         this._game.start = true;
     }
 
-    reStart() {
+    stop() {
         this._game.stop();
-        this.start();
     }
     /**
      * 绑定键盘事件

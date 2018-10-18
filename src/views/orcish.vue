@@ -5,7 +5,7 @@
             <canvas id="canvas2" width="1200px" height="800px"></canvas>
         </div>
         <div class="text-center mt10">
-            <button class="btn btn-warning btn-lg btn-orcish" @click="start">重新开始</button>
+            <Button long type="warning" size="large" class="btn-orcish" @click="start">重新开始</Button>
         </div>
         <div class="rule" @mouseenter="showRule" @mouseleave="hideRule">
             <p>1、方向键操作： 方向键控制移动，空格键发射魔法飞弹；</p>
@@ -45,10 +45,9 @@
         }
 
         start() {
-            if (this._orcish) {
-                this._orcish.start();
-                $(".btn-orcish").blur();
-            }
+            this._orcish = new OrcishGame();
+            this._orcish.start();
+            $(".btn-orcish").blur();
         }
 
         end() {

@@ -5,7 +5,7 @@
             <canvas id="canvas2" width="1200px" height="800px"></canvas>
         </div>
         <div class="text-center mt10">
-            <button class="btn btn-warning btn-lg btn-orcish" @click="start">重新开始</button>
+            <Button long type="warning" size="large" class="btn-orcish" @click="start">重新开始</button>
         </div>
         <audio AUTOPLAY LOOP>
             <source src="../../static/mp3/monster.mp3" type="audio/mpeg">
@@ -26,14 +26,12 @@
         }
 
         mounted() {
-            this._game = new MonsterGame();
-            this._game.start();
+            this.start();
         }
 
         start() {
-            if (this._game) {
-                this._game.start();
-            }
+            this._game = new MonsterGame();
+            this._game.start();
         }
 
         end() {
