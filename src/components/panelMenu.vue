@@ -1,62 +1,109 @@
 <template>
-    <div>
-        <!--右菜单-->
-        <div class="right-menu" >
-            <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
-            <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
-            <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1 || true" @click="onshowLeftMenu('manage')">管理</div>
-            <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.nickname ? userData.nickname : '游客250'}}</div>
+  <div>
+    <div v-if="isMobile">
+      <div class="mobile-title">
+        <p>愿我如星君如月</p>
+        <p>夜夜流光相皎洁</p>
+      </div>
+      <span class="mobile-items-container" v-show="showMobileContainer">
+        <div class="mobile-item" @click="onShowMobileItem('novel')">小说</div>
+        <div class="mobile-item" @click="onShowMobileItem('game')">游戏</div>
+      </span>
+      <div class="mobile-message" v-show="showMobileMessage">{{mobileMessage}}</div>
+      <div class="mobile-novel-panel" :class="{menu: currentNovelPanel === 'menu', catalog: currentNovelPanel === 'catalog', chapter: currentNovelPanel === 'chapter'}">
+        <div class="mobile-novel-item">
+          <div class="mobile-novel-title">
+            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'chapter'" @touchend.native="onChangePanel('catalog')"></Icon>
+          </div>
+          <div class="mobile-novel-chapter-container">
+          <div class="mobile-novel-chapter" v-html="chapterData.content"></div>
+          </div>
+        </div>
+        <div class="mobile-novel-item">
+          <div class="mobile-novel-title">
+            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'catalog'" @touchend.native="onChangePanel('menu')"></Icon>
+          </div>
+          <div class="mobile-novel-chapter-container">
+            <div class="mobile-novel-img">
+              <img :src="novelInfo.img" />
+            </div>
+            <div class="novel-info-label">书名: <span class="info-value">{{novelInfo.name}}</span></div>
+            <div class="novel-info-label">题材: <span class="info-value">{{novelInfo.theme}}</span></div>
+            <div class="novel-info-label">创作状态: <span class="info-value">{{statusList[novelInfo.is_end]}}</span></div>
+            <div class="novel-info-label mb20">简介: <span class="info-value">{{novelInfo.description}}</span></div>
+            <div class="novel-catalog-item mb10" v-for="(item, index) in novelCatalogs" :key="index" @touchend="onShowMobileChapter(item.id)">{{item.name}}</div>
+          </div>
+        </div>
+        <div class="mobile-novel-item">
+          <div class="mobile-novel-title">
+            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'menu'" @touchend.native="onHideNovelPanel"></Icon>
+          </div>
+          <div class="mobile-novel-chapter-container">
+            <div class="novel-menu-item" v-for="item in this.menuLists['novels']" :key="item.id" @click="onShowMobileNovel(item.id, item.name)">{{item.name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <!--右菜单-->
+      <div class="right-menu" >
+        <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
+        <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
+        <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1 || true" @click="onshowLeftMenu('manage')">管理</div>
+        <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.nickname ? userData.nickname : '游客250'}}</div>
 
-        </div>
-        <div class="right-menu-sign"  @click.self="onShowRightMenu()">
-            <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_in')">登录</div>
-            <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_up')">注册</div>
-        </div>
-        <!--左菜单-->
-        <div class="left-menu" :class="{'show-left-menu': showLeftMenu, 'back-left-menu': backLeftMenu}">
-            <span  v-for="item in currentMenu" :key="item.id">
+      </div>
+      <div class="right-menu-sign"  @click.self="onShowRightMenu()">
+        <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_in')">登录</div>
+        <div class="right-menu-item cursor-pointer right-menu-sign-item" @click="onshowLeftMenu('sign_up')">注册</div>
+      </div>
+      <!--左菜单-->
+      <div class="left-menu" :class="{'show-left-menu': showLeftMenu, 'back-left-menu': backLeftMenu}">
+            <span v-for="item in currentMenu" :key="item.id">
                 <router-link :to="item.url || '/'">
                     <div class="left-menu-item cursor-pointer" @click="onShowMain(item.id, item.name)">
                         <span>{{item.name}}</span>
                     </div>
                 </router-link>
-            </span>        
-           
-            <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
-            <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
+            </span>
 
-            <Button v-if="currentType === 'manage'" size="large" long type="success" class="f18 o6" @click="onShowMain('manage', 'novel')">管理小说</Button>
-            <Button v-if="currentType === 'manage'" size="large" long type="warning" class="f18 o6" @click="onShowMain('manage', 'game')">管理游戏</Button>
+        <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
+        <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
 
+        <Button v-if="currentType === 'manage'" size="large" long type="success" class="f18 o6" @click="onShowMain('manage', 'novel')">管理小说</Button>
+        <Button v-if="currentType === 'manage'" size="large" long type="warning" class="f18 o6" @click="onShowMain('manage', 'game')">管理游戏</Button>
+
+      </div>
+      <!--上标题-->
+      <div class="top-title" :class="{'show-title': showTitle, 'back-title': backTitle}">
+        <span v-if="!isReading">{{currentTitle}}</span>
+        <div class="novel-msg container-fluid" v-if="isReading">
+          <div class="col-xs-12 text-center index-title">{{indexData.iName}}</div>
+          <div class="col-xs-6 text-center index-msg">字数： {{indexData.count}}</div>
+          <div class="col-xs-6 text-center index-msg">上传时间： {{indexData.createTime}}</div>
         </div>
-        <!--上标题-->
-        <div class="top-title" :class="{'show-title': showTitle, 'back-title': backTitle}">
-            <span v-if="!isReading">{{currentTitle}}</span>
-            <div class="novel-msg container-fluid" v-if="isReading">
-                <div class="col-xs-12 text-center index-title">{{indexData.iName}}</div>
-                <div class="col-xs-6 text-center index-msg">字数： {{indexData.count}}</div>
-                <div class="col-xs-6 text-center index-msg">上传时间： {{indexData.createTime}}</div>
-            </div>
+      </div>
+      <!--下主体-->
+      <div class="main" :class="{'show-main': showMain, 'back-main': backMain, 'expand': isExpand}">
+        <div class="main-title">
+          <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="(isReading || currentManagePanel !== 'list') && currentManagePanel !== 'recycle'" @click.native="onBackToIndex"></Icon>
+          <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="currentManagePanel === 'recycle'" @click.native="onBackToNovelMange"></Icon>
+          <Icon type="md-contract" class="cursor-pointer" size="20" color="gray" v-if="isExpand" @click.native="onContract"></Icon>
+          <Icon type="md-expand" class="cursor-pointer" size="20" color="gray" v-if="!isExpand" @click.native="onExpand"></Icon>
+          <Icon type="md-power" size="20" class="cursor-pointer" color="gray" @click.native="onHideMain"></Icon>
         </div>
-        <!--下主体-->
-        <div class="main" :class="{'show-main': showMain, 'back-main': backMain, 'expand': isExpand}">
-            <div class="main-title">
-                <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="(isReading || currentManagePanel !== 'list') && currentManagePanel !== 'recycle'" @click.native="onBackToIndex"></Icon>
-                <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="currentManagePanel === 'recycle'" @click.native="onBackToNovelMange"></Icon>
-                <Icon type="md-contract" class="cursor-pointer" size="20" color="gray" v-if="isExpand" @click.native="onContract"></Icon>
-                <Icon type="md-expand" class="cursor-pointer" size="20" color="gray" v-if="!isExpand" @click.native="onExpand"></Icon>
-                <Icon type="md-power" size="20" class="cursor-pointer" color="gray" @click.native="onHideMain"></Icon>
-            </div>
-            <novel-panel v-if="currentType === 'novels' && !isReading" :novelData="novelData" @read="onBeginReading"></novel-panel>
-            <game-manage v-show="currentType === 'manage' && manageType === 'game'"></game-manage>
-            <novel-manage ref="novel_manage" v-show="currentType === 'manage' && manageType === 'novel'" @panel="getManagePanel"></novel-manage>
-            <div class="novel-content" v-if="isReading">
-                <div v-html="contentData.content"></div>
-            </div>
-            <router-view></router-view>
+        <novel-panel v-if="currentType === 'novels' && !isReading" :novelData="novelData" @read="onBeginReading"></novel-panel>
+        <game-manage v-show="currentType === 'manage' && manageType === 'game'"></game-manage>
+        <novel-manage ref="novel_manage" v-show="currentType === 'manage' && manageType === 'novel'" @panel="getManagePanel"></novel-manage>
+        <div class="novel-content" v-if="isReading">
+          <div v-html="chapterData.content"></div>
         </div>
+        <router-view></router-view>
+      </div>
 
     </div>
+  </div>
+
 </template>
 
 <script lang="ts">
@@ -95,7 +142,7 @@
         private isReading: boolean = false;    //是否阅读状态
         private currentManagePanel: string = 'list';   //是否处于管理界面
         private managePanels: string[] = ['list', 'info', 'index', 'content'];
-        private contentData = {};        //章节内容
+        private chapterData = {};        //章节内容
         private indexData = {};    //章节信息
         private userData = {
             role_id: ''
@@ -104,6 +151,17 @@
         private right_right_menu_sign: number = 0;      //右下菜单收起长度
         private top_right_menu: string = '';     //右菜单收起长度
         private tempType: string = '';
+        private isMobile: boolean = false;
+        private mobileMessage: string = '';
+        private showMobileMessage: boolean = false;
+        private showMobileContainer: boolean = true;
+        private currentNovelPanel: string = '';
+        private novelInfo:any = {};
+        private novelCatalogs: any[] = [];
+        private statusList =
+            {
+                0: '连载中', 1: '已完结'
+            };
 
         @Action('getMenuList')
         doGetMenuList() {};
@@ -112,14 +170,68 @@
             this.doGetMenuList();
             this.userData = this.getUserData;
         }
-
-        mounted() {
-            this.rightMenuResize();
-            window.onresize = () => {
-                this.rightMenuResize();
-            };
-
+        beforeMount() {
+            this.isMobile = screen.width / screen.height < 1;
+            if (this.isMobile) {
+                $('html').addClass('mobile');
+            } else {
+                $('html').addClass('web');
+            }
         }
+        mounted() {
+            if (!this.isMobile) {
+                this.rightMenuResize();
+                window.onresize = () => {
+                    this.rightMenuResize();
+                };
+            }
+        }
+        onShowMobileItem(type: string) {
+          if (type === 'novel') {
+            this.showMobileContainer = false;
+            this.currentNovelPanel = 'menu';
+          }  else if (type === 'game') {
+              this.onShowMobileMessage('目前只支持网页版');
+          }
+        }
+
+        onHideNovelPanel() {
+            this.showMobileContainer = true;
+            this.currentNovelPanel = '';
+        }
+
+        onChangePanel(val: string) {
+            this.currentNovelPanel = val;
+        }
+
+        onShowMobileNovel(id: number, name: string) {
+            window.post('novel', {id: id}, (res: any) => {
+                if (res.error_code === 0) {
+                    this.currentNovelPanel = 'catalog';
+                    this.novelInfo = res.data;
+                    this.novelInfo.name = name;
+                    this.novelCatalogs = this.novelInfo.catalog;
+                } else {
+                    this.$Message.error(res.message);
+                }
+            });
+        }
+
+        onShowMobileChapter(id: number) {
+            this.doGetChapter(id);
+            this.currentNovelPanel = 'chapter';
+        }
+
+        onShowMobileMessage(msg: string) {
+            if (!this.showMobileMessage) {
+                this.mobileMessage = msg;
+                this.showMobileMessage = true;
+                setTimeout(() => {
+                    this.showMobileMessage = false;
+                }, 1500);
+            }
+        }
+
         rightMenuResize() {
             const width_right: number | undefined = $('.right-menu').width() || 0;
             $('.right-menu').height(width_right * 649 / 425);
@@ -270,15 +382,19 @@
         onBeginReading(obj: any) {
             this.isReading = true;
             this.indexData = obj;
+            this.doGetChapter(obj.id);
+        }
 
-            window.post('chapter', {id: obj.id}, (res: any) => {
+        doGetChapter(id: number) {
+            window.post('chapter', {id: id}, (res: any) => {
                 if (res.error_code === 0) {
-                   this.contentData = res.data;
+                    this.chapterData = res.data;
                 } else {
                     this.$Message.error(res.message);
                 }
             });
         }
+
         /**
          * 回到目录页
          */
@@ -336,7 +452,10 @@
     @panel_color: black;
     @panel_opacity: .6;
     @panel_right_color: #333;
-
+    @font-face {
+      font-family: panel_font;
+      src: url("../assets/font/2.ttf");
+    }
     @keyframes bgcolor
     {
       from { background-color: transparent }
@@ -348,16 +467,140 @@
       to { color: black}
     }
 
+    @keyframes mobile_item {
+      from { margin-top: 10vh; margin-left: 5vw; }
+      to { margin-top: 15vh; margin-left: 15vw; }
+    }
+
+    @keyframes novel_item {
+      from { margin-top: 1vh; margin-left: 8vw; }
+      to { margin-top: 1.5vh; margin-left: 12vw; }
+    }
+
+    html {
+      &.web .zora-world {
+        background-image: radial-gradient(circle at 80% 80%, transparent 0, black 50%);
+      }
+      &.mobile .zora-world {
+        background-image: radial-gradient(circle at 70% 70%, transparent 0, black 70%);
+
+        .mobile-title {
+          position: absolute;
+          bottom: 0;
+          font-family: panel_font;
+          text-align: center;
+          width: 100%;
+          font-size: 1.2rem;
+          animation: color 5s infinite alternate;
+        }
+
+        .mobile-example {
+          width: 80vw;
+          margin: 10vh auto;
+          border-radius: 0.3rem;
+          text-align: center;
+          font-size: 1.5rem;
+        }
+
+        .mobile-item {
+          .mobile-example();
+          height: 10vh;
+          line-height: 10vh;
+          background: rgba(200,200,200,.1);
+          animation: mobile_item 5s infinite alternate;
+        }
+
+        .mobile-message {
+          .mobile-example();
+          padding: 0.5vh 0.5vw;
+          color: lightgrey;
+          font-weight: 400;
+          font-size: 1rem;
+        }
+
+        .mobile-novel-panel {
+          width: 300vw;
+          height: 100vh;
+          background: rgba(200,200,200,.8);
+          position: absolute;
+          left: -300vw;
+          display: flex;
+          flex-direction: row;
+
+          &.menu {
+            left: -200vw;
+          }
+
+          &.catalog {
+            left: -100vw;
+          }
+
+          &.chapter {
+            left: 0;
+          }
+
+          .mobile-novel-item {
+            width: 100vw;
+            font-size: 1.2rem;
+            overflow: hidden;
+            position: relative;
+          }
+
+          .mobile-novel-title {
+            height: 10vh;
+          }
+
+          .novel-menu-item {
+            width: 80vw;
+            height: 5vh;
+            line-height: 5vh;
+            padding-left:1rem;
+            font-size: 1.2rem;
+            background-image: linear-gradient(to right,gray 0, transparent 100%);
+            border-radius: 0.3rem;
+            animation: novel_item 5s infinite alternate;
+          }
+
+          .mobile-novel-img {
+            text-align: center;
+            border-radius: .3rem;
+          }
+
+          .novel-info-label {
+            color: grey;
+            padding-left:10vw;
+
+            .info-value {
+              color: lightgrey;
+            }
+          }
+
+          .novel-catalog-item {
+            padding-left:10vw;
+          }
+
+          .mobile-novel-chapter-container {
+            overflow: auto;
+            height: 90vh;
+          }
+
+          .mobile-novel-chapter {
+            width: 100vw;
+            padding: 1rem;
+          }
+
+
+        }
+      }
+    }
+
     .zora-world {
       width: 100%;
       height: 100%;
       position: relative;
       overflow: hidden;
-
-
-      font-family: "Microsoft YaHei";
-      background-image: radial-gradient(circle at 80% 80%, transparent 0, black 50%);
       animation: bgcolor 5s infinite alternate;
+      font-family: "Microsoft YaHei";
 
       .right-menu {
         width: 20%;

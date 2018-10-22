@@ -1,6 +1,5 @@
 <template>
     <div class="zora-world">
-
         <router-view></router-view>
     </div>
 </template>
