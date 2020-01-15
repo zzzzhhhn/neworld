@@ -13,7 +13,7 @@
       <div class="mobile-novel-panel" :class="{menu: currentNovelPanel === 'menu', catalog: currentNovelPanel === 'catalog', chapter: currentNovelPanel === 'chapter'}">
         <div class="mobile-novel-item">
           <div class="mobile-novel-title">
-            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'chapter'" @touchend.native="onChangePanel('catalog')"></Icon>
+            <el-icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'chapter'" @touchend.native="onChangePanel('catalog')"></el-icon>
           </div>
           <div class="mobile-novel-chapter-container">
           <div class="mobile-novel-chapter" v-html="chapterData.content"></div>
@@ -21,7 +21,7 @@
         </div>
         <div class="mobile-novel-item">
           <div class="mobile-novel-title">
-            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'catalog'" @touchend.native="onChangePanel('menu')"></Icon>
+            <el-icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'catalog'" @touchend.native="onChangePanel('menu')"></el-icon>
           </div>
           <div class="mobile-novel-chapter-container">
             <div class="mobile-novel-img">
@@ -36,7 +36,7 @@
         </div>
         <div class="mobile-novel-item">
           <div class="mobile-novel-title">
-            <Icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'menu'" @touchend.native="onHideNovelPanel"></Icon>
+            <el-icon type="ios-undo" size="50" class="cursor-pointer pull-right mr10 poa t0 r0" color="gray" v-if="currentNovelPanel === 'menu'" @touchend.native="onHideNovelPanel"></el-icon>
           </div>
           <div class="mobile-novel-chapter-container">
             <div class="novel-menu-item" v-for="item in this.menuLists['novels']" :key="item.id" @click="onShowMobileNovel(item.id, item.name)">{{item.name}}</div>
@@ -86,11 +86,11 @@
       <!--下主体-->
       <div class="main" :class="{'show-main': showMain, 'back-main': backMain, 'expand': isExpand}">
         <div class="main-title">
-          <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="(isReading || currentManagePanel !== 'list') && currentManagePanel !== 'recycle'" @click.native="onBackToIndex"></Icon>
-          <Icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="currentManagePanel === 'recycle'" @click.native="onBackToNovelMange"></Icon>
-          <Icon type="md-contract" class="cursor-pointer" size="20" color="gray" v-if="isExpand" @click.native="onContract"></Icon>
-          <Icon type="md-expand" class="cursor-pointer" size="20" color="gray" v-if="!isExpand" @click.native="onExpand"></Icon>
-          <Icon type="md-power" size="20" class="cursor-pointer" color="gray" @click.native="onHideMain"></Icon>
+          <el-icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="(isReading || currentManagePanel !== 'list') && currentManagePanel !== 'recycle'" @click.native="onBackToIndex"></el-icon>
+          <el-icon type="ios-undo" class="cursor-pointer" size="20" color="gray" v-if="currentManagePanel === 'recycle'" @click.native="onBackToNovelMange"></el-icon>
+          <el-icon type="md-contract" class="cursor-pointer" size="20" color="gray" v-if="isExpand" @click.native="onContract"></el-icon>
+          <el-icon type="md-expand" class="cursor-pointer" size="20" color="gray" v-if="!isExpand" @click.native="onExpand"></el-icon>
+          <el-icon type="md-power" size="20" class="cursor-pointer" color="gray" @click.native="onHideMain"></el-icon>
         </div>
         <novel-panel v-if="currentType === 'novels' && !isReading" :novelData="novelData" @read="onBeginReading"></novel-panel>
         <game-manage v-show="currentType === 'manage' && manageType === 'game'"></game-manage>

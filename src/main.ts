@@ -7,7 +7,7 @@ import './registerServiceWorker';
 import './assets/less/layouts.less';
 import $ from 'jquery';
 import post from './libs/fetch';
-
+import './plugins/element';
 
 
 declare global {

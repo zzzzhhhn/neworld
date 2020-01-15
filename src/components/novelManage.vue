@@ -5,11 +5,11 @@
                 <el-input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入小说名称" />
             </el-col>
             <el-col span="8" class="pl20">
-                <el-el-button-group size="large">
+                <el-button-group size="large">
                     <el-button type="success" class="ml20" @click="updateNovelData(item)">保存</el-button>
                     <el-button type="warning" class="ml20" @click="deleteNovelData(item.id)">删除</el-button>
                     <el-button type="info" class="ml20" @click="novelInfoManage(item.id)">信息管理</el-button>
-                </el-el-button-group>
+                </el-button-group>
             </el-col>
         </el-row>
 
@@ -71,11 +71,11 @@
                 <el-input v-model="item.name" size="large" />
             </el-col>
             <el-col span="12">
-                <el-el-button-group size="large">
+                <el-button-group size="large">
                     <el-button type="warning" @click="updateIndexData(item)">保存</el-button>
                     <el-button type="danger" @click="deleteIndexData(item.id)">删除</el-button>
                     <el-button type="info" @click="novelContentManage(item.id)">内容管理</el-button>
-                </el-el-button-group>
+                </el-button-group>
             </el-col>
         </el-row>
 

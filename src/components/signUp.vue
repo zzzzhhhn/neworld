@@ -1,20 +1,20 @@
 <template>
     <div class="app-sign">
-        <el-form ref="form_signup" :model="formValidate" :rules="ruleValidate" :label-width="0">
-            <<el-form-item label="" prop="account" class="mb30">
+        <el-form ref="form_signup" :model="formValidate" :rules="ruleValidate" label-width="0">
+            <el-form-item label="" prop="account" class="mb30">
                 <el-input v-model="formValidate.account" prefix="md-person" size="large" placeholder="账号应为3~9位字母或数字" />
             </el-form-item>
-            <<el-form-item label="" prop="password" class="mb30">
+            <el-form-item label="" prop="password" class="mb30">
                 <el-input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="密码应为6~16位字母或数字" />
             </el-form-item>
-            <<el-form-item label="" prop="re_password" class="mb30">
+            <el-form-item label="" prop="re_password" class="mb30">
                 <el-input v-model="formValidate.re_password" prefix="md-lock" type="password" size="large" placeholder="请再次输入密码" />
             </el-form-item>
-            <<el-form-item label="" prop="" class="text-center">
-              <el-el-button-group size="large" class="w100">
+            <el-form-item label="" prop="" class="text-center">
+              <el-button-group size="large" class="w100">
                 <el-button type="primary" @click="handleSubmit" class="w50">提交</el-button>
                 <el-button @click="handleReset" class="w50">重置</el-button>
-              </el-el-button-group>
+              </el-button-group>
 
             </el-form-item>
         </el-form>
@@ -38,19 +38,19 @@
 
         private ruleValidate = {
             account: [
-                {require: true, massage: '账号不能为空'},
-                {pattern: /^[a-zA-Z0-9]{3,9}$/, message: '账号应为3~9位汉字、字母或数字'}
+                {required: true, message: '账号不能为空', trigger: 'change'},
+                {pattern: /^[a-zA-Z0-9]{3,9}$/, message: '账号应为3~9位汉字、字母或数字', trigger: 'change'}
             ],
             password: [
-                {require: true, massage: '密码不能为空'},
-                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字'}
+                {required: true, message: '密码不能为空', trigger: 'change'},
+                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字', trigger: 'change'}
             ],
             re_password: [
-                {require: true, massage: '密码不能为空'},
-                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字'},
-                {validator: this.valiConfirmPwd, message: '两次输入的密码不一致'}
+                {required: true, message: '密码不能为空', trigger: 'change'},
+                {pattern: /^[a-zA-Z0-9]{6,16}$/, message: '密码应为6~16位字母或数字', trigger: 'change'},
+                {validator: this.valiConfirmPwd, message: '两次输入的密码不一致', trigger: 'change'}
             ],
-        }
+        };
         private isPosting: boolean = false;
         private postCount: number = 0;
 

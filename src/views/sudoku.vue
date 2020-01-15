@@ -4,12 +4,12 @@
         <div class="container-sudoku grid" id="container"></div>
         <!--按钮组-->
         <div id="dashboard">
-            <el-el-button-group class="w100 suduku-btn-group" size="large">
+            <el-button-group class="w100 suduku-btn-group" size="large">
                 <el-button id="check" title="点击查看结果，错误位置会标记为粉色">检查</el-button>
                 <el-button id="reset" title="点击重置本局游戏">重置</el-button>
                 <el-button id="clear" title="点击清理错误标记">清理</el-button>
                 <el-button id="rebuild" title="点击重建一局新游戏">重建</el-button>
-            </el-el-button-group>
+            </el-button-group>
         </div>
         <!--弹出面板-->
         <div id="popupNumbers" class="grid popup-num hidden">

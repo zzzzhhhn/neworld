@@ -8,10 +8,10 @@
                 <el-input v-model="item.url" prefix="ios-book" size="large" placeholder="请输入游戏url" />
             </el-col>
             <el-col span="8" class="pl20">
-            <el-el-button-group size="large">
+            <el-button-group size="large">
                 <el-button type="success" class="ml20" @click="updateGameData(item)">保存</el-button>
                 <el-button type="warning" class="ml20" @click="deleteGameData(item.id)">删除</el-button>
-            </el-el-button-group>
+            </el-button-group>
             </el-col>
         </el-row>
 
