@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import fetch from '../libs/fetch';
+  import * as moment from 'moment';
   import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
   import { Action } from 'vuex-class';
   import md5 from 'md5';
@@ -23,18 +23,39 @@
     @Component
     export default class signIN extends Vue {
 
-    private formValidate = {
-        account: '',
-        password: ''
-    };
+        private formValidate = {
+            account: '',
+            password: ''
+        };
+        private isPosting: boolean = false;
+        private postCount: number = 0;
 
         @Action('getUserData')
         doGetUserData(val: any){};
 
         handleSubmit() {
+            if (this.isPosting) {
+                return this.$Message.warning('你太快了，受不了！')
+            }
+            this.postCount = parseInt(localStorage.getItem('signInPostCount') || '0');
+            if (this.postCount > 5) {
+                const last_time = localStorage.getItem('signInPostTime') || moment().format('YYYY-MM-DD HH:mm:ss');
+                if (moment().diff(last_time, 'days') < 1) {
+                    return this.$Message.error('服务器累了，明天再来吧');
+                } else {
+                    this.postCount = 0;
+                }
+            }
+            this.isPosting = true;
+            this.postCount++;
+            localStorage.setItem('signInPostCount', this.postCount.toString());
+            localStorage.setItem('signInPostTime', moment().format('YYYY-MM-DD HH:mm:ss'));
             const password = md5(this.formValidate.password);
             window.post('signin', {account: this.formValidate.account, password: password}, (res: any) => {
                 if (res.error_code === 0) {
+                    setTimeout(() => {
+                        this.isPosting = false;
+                    }, 1000);
                     this.doGetUserData(res.data);
                     sessionStorage.setItem('zw_token', res.data.token);
                     this.$emit('success');

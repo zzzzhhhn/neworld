@@ -25,6 +25,7 @@
 <script lang="ts">
     import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
     import md5 from 'md5';
+    import * as moment from 'moment';
 
     @Component
     export default class signUp extends Vue {
@@ -50,6 +51,8 @@
                 {validator: this.valiConfirmPwd, message: '两次输入的密码不一致'}
             ],
         }
+        private isPosting: boolean = false;
+        private postCount: number = 0;
 
         valiConfirmPwd(rule: any, value: string, callback: Function) {
             if (value !== this.formValidate.password) {
@@ -62,9 +65,28 @@
         handleSubmit() {
             (<Vue>this.$refs.form_signup).validate((result: boolean) => {
                 if (result) {
+                    if (this.isPosting) {
+                        return this.$Message.warning('你太快了，受不了！')
+                    }
+                    this.postCount = parseInt(localStorage.getItem('signUpPostCount') || '0');
+                    if (this.postCount > 5) {
+                        const last_time = localStorage.getItem('signUpPostTime') || moment().format('YYYY-MM-DD HH:mm:ss');
+                        if (moment().diff(last_time, 'days') < 1) {
+                            return this.$Message.error('服务器累了，明天再来吧');
+                        } else {
+                            this.postCount = 0;
+                        }
+                    }
+                    this.isPosting = true;
+                    this.postCount++;
+                    localStorage.setItem('signUpPostCount', this.postCount.toString());
+                    localStorage.setItem('signUpPostTime', moment().format('YYYY-MM-DD HH:mm:ss'));
                     const password = md5(this.formValidate.password);
                     window.post('signup', {account: this.formValidate.account, password: password}, (res: any) => {
                         if (res.error_code === 0) {
+                            setTimeout(() => {
+                                this.isPosting = false;
+                            }, 1000);
                             this.$Message.success('注册成功');
                             this.$emit('success');
                         }else {

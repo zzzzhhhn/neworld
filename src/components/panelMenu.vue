@@ -49,7 +49,7 @@
       <div class="right-menu" >
         <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('novels')">小说</div>
         <div class="right-menu-item cursor-pointer" @click="onshowLeftMenu('games')">游戏</div>
-        <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1 || true" @click="onshowLeftMenu('manage')">管理</div>
+        <div class="right-menu-item cursor-pointer" v-if="userData.role_id == 1" @click="onshowLeftMenu('manage')">管理</div>
         <div class="user-name" @click.self="onShowRightMenu()">欢迎您，{{!!userData.nickname ? userData.nickname : '游客250'}}</div>
 
       </div>
