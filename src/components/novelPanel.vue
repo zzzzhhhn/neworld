@@ -6,15 +6,15 @@
                 <div class="novel-msg"><span>题材： </span>{{novelData.theme}}</div>
                 <div class="novel-msg"><span>创作状态： </span>{{statusList[novelData.is_end]}}</div>
                 <div class="novel-describe"><div>简介：</div><div class="describe-content">{{novelData.description}}</div></div>
-                <!--<Button type="primary" class="mr20" @click="onBeginReading(novelData.indexes[0])">开始阅读</button>-->
-                <!--<Button type="warning">继续阅读</button>-->
+                <!--<el-button type="primary" class="mr20" @click="onBeginReading(novelData.indexes[0])">开始阅读</el-button>-->
+                <!--<el-button type="warning">继续阅读</el-button>-->
             </div>
         </div>
 
         <div class="novel-indexes">
             <h1>目录</h1>
-          
-            <Tag :color="colors[Math.floor(Math.random() * 16)]" class="tag-catalogs" v-for="item in novelData.catalog" :key="item.id" @click.native="onBeginReading(item)">{{item.name}}</Tag>
+
+            <el-tag :color="colors[Math.floor(Math.random() * 16)]" class="tag-catalogs" v-for="item in novelData.catalog" :key="item.id" @click.native="onBeginReading(item)">{{item.name}}</el-tag>
         </div>
 
     </div>
@@ -28,9 +28,9 @@
             type: Object,
             default: {}
         })novelData: any;
-        
+
         private colors = ['primary', 'success', 'error', 'warning', 'magenta', 'red', 'volcano', 'orange', 'gold', 'yellow', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
-        
+
         private statusList =
             {
                 0: '连载中', 1: '已完结'
@@ -39,8 +39,8 @@
         onBeginReading(indexObj: any) {
             this.$emit('read', indexObj);
         }
-         
-        
+
+
     }
 
 </script>
@@ -61,7 +61,7 @@
             flex: auto;
             padding-left: 30px;
 
-            button {
+            el-button {
                 font-size: 20px;
                 text-shadow: 0 0 10px gray;
             }
@@ -101,7 +101,7 @@
         padding: 0 10%;
         color: #333;
         font-size: 20px;
-      
+
     }
 .tag-catalogs {
             cursor: pointer;

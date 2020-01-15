@@ -6,20 +6,19 @@
 <script lang="ts">
     import Vue, { VueConstructor } from 'vue'
     import Component from 'vue-class-component'
-    import {ModalInstance, Message} from 'iview'
     import { Getter, Action } from 'vuex-class';
 
     declare module 'vue/types/vue' {
         interface Vue {
-            $Modal: ModalInstance,
-            $Message: Message,
+            $message: any,
+            $confirm: any,
             validate: Function,
             resetFields: Function
         }
 
         interface VueConstructor {
-            $Modal: ModalInstance,
-            $Message: Message,
+            $message: any,
+            $confirm: any,
             validate: Function,
             resetFields: Function
         }
@@ -38,7 +37,7 @@
                   if (res.error_code === 0) {
                       this.getUserData(res.data);
                   } else {
-                      this.$Message.error(res.message);
+                      this.$message.error(res.message);
                   }
               });
           }

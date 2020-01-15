@@ -1,24 +1,24 @@
 <template>
     <div v-if="currentPanel === 'list'">
-        <Row class="mb20 pl20" v-for="(item, index) in novelList" :key="index">
-            <Col span="16">
-                <Input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入小说名称" />
-            </Col>
-            <Col span="8" class="pl20">
-                <ButtonGroup size="large">
-                    <Button type="success" class="ml20" @click="updateNovelData(item)">保存</Button>
-                    <Button type="warning" class="ml20" @click="deleteNovelData(item.id)">删除</Button>
-                    <Button type="info" class="ml20" @click="novelInfoManage(item.id)">信息管理</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
+        <el-row class="mb20 pl20" v-for="(item, index) in novelList" :key="index">
+            <el-col span="16">
+                <el-input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入小说名称" />
+            </el-col>
+            <el-col span="8" class="pl20">
+                <el-el-button-group size="large">
+                    <el-button type="success" class="ml20" @click="updateNovelData(item)">保存</el-button>
+                    <el-button type="warning" class="ml20" @click="deleteNovelData(item.id)">删除</el-button>
+                    <el-button type="info" class="ml20" @click="novelInfoManage(item.id)">信息管理</el-button>
+                </el-el-button-group>
+            </el-col>
+        </el-row>
 
-        <Button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addNovelData">新增</Button>
-        <Button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</Button>
+        <el-button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addNovelData">新增</el-button>
+        <el-button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</el-button>
     </div>
     <div v-else-if="currentPanel === 'info'" class="text-center">
         <div class="novel-upload">
-            <Upload
+            <el-upload
                     accept="image/*"
                     type="drag"
                     :max-size="2048"
@@ -29,12 +29,12 @@
                     :show-upload-list="false"
             >
                 <div style="padding: 20px 0">
-                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <el-icon type="ios-cloud-upload" size="52" style="color: #3399ff"></el-icon>
                     <p>Click or drag files here to upload</p>
                 </div>
-            </Upload>
+            </el-upload>
         </div>
-        <Select
+        <el-select
                 v-model="postInfo.theme"
                 style="width:200px"
                 :multiple="true"
@@ -42,10 +42,10 @@
                 class="mt20 mb20"
                 placeholder="题材类型"
         >
-            <Option v-for="item in themeList" :value="item" :key="item">{{ item }}</Option>
-        </Select>
+            <el-option v-for="item in themeList" :value="item" :key="item">{{ item }}</el-option>
+        </el-select>
         <br/>
-        <Select
+        <el-select
                 v-model="postInfo.is_end"
                 style="width:200px"
                 size="large"
@@ -53,49 +53,49 @@
                 placeholder="完成状态"
         >
             <Option v-for="item in statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+        </el-select>
         <br/>
         <textarea v-model="postInfo.description" type="textarea" class="form-control" placeholder="简介" style="width: 400px; margin: auto"></textarea>
         <br/>
-        <Button type="primary" class="mt20" style="width: 200px" @click="updateNovelInfo">保存</Button>
+        <el-button type="primary" class="mt20" style="width: 200px" @click="updateNovelInfo">保存</el-button>
         <br/>
-        <Button type="primary" class="mt20" style="width: 200px" @click="novelIndexManage(postInfo.id)">章节管理</Button>
+        <el-button type="primary" class="mt20" style="width: 200px" @click="novelIndexManage(postInfo.id)">章节管理</el-button>
     </div>
     <div v-else-if="currentPanel === 'index'" class="container" style="width:90%;margin:auto">
         <div class="row btn-group btn-group-lg">
-            <Button type="primary" @click="addIndexData">新增</Button>
+            <el-button type="primary" @click="addIndexData">新增</el-button>
         </div>
 
-        <Row class="mt20" v-for="(item, index) in novelCatalogs" :key="index">
-            <Col span="12">
-                <Input v-model="item.name" size="large" />
-            </Col>
-            <Col span="12">
-                <ButtonGroup size="large">
-                    <Button type="warning" @click="updateIndexData(item)">保存</Button>
-                    <Button type="danger" @click="deleteIndexData(item.id)">删除</Button>
-                    <Button type="info" @click="novelContentManage(item.id)">内容管理</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
+        <el-row class="mt20" v-for="(item, index) in novelCatalogs" :key="index">
+            <el-col span="12">
+                <el-input v-model="item.name" size="large" />
+            </el-col>
+            <el-col span="12">
+                <el-el-button-group size="large">
+                    <el-button type="warning" @click="updateIndexData(item)">保存</el-button>
+                    <el-button type="danger" @click="deleteIndexData(item.id)">删除</el-button>
+                    <el-button type="info" @click="novelContentManage(item.id)">内容管理</el-button>
+                </el-el-button-group>
+            </el-col>
+        </el-row>
 
 
     </div>
     <div v-else-if="currentPanel === 'content'" class="text-center">
         <div ref="editor" style="text-align:left"></div>
         <div class="mt20">
-            <Button type="primary" style="width:200px" @click="addContentData">保存</Button>
+            <el-button type="primary" style="width:200px" @click="addContentData">保存</el-button>
         </div>
     </div>
     <div v-else-if="currentPanel === 'recycle'">
-        <Row class="mb20 pl20" v-for="item in recycleList" :key="item.id">
-            <Col span="16" class="f16" style="color: #333">
+        <el-row class="mb20 pl20" v-for="item in recycleList" :key="item.id">
+            <el-col span="16" class="f16" style="color: #333">
                 {{item.name}}
-            </Col>
-            <Col span="8">
-                <Button type="success" class="ml20" @click="recycleNovel(item.id)">回收</Button>
-            </Col>
-        </Row>
+            </el-col>
+            <el-col span="8">
+                <el-button type="success" class="ml20" @click="recycleNovel(item.id)">回收</el-button>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -177,7 +177,7 @@ export default class novelManage extends Vue {
             });
             this.postInfo.img = img_url;
         } else {
-            this.$Message.error(response.message);
+            this.$message.error(response.message);
         }
 
     }
@@ -186,7 +186,7 @@ export default class novelManage extends Vue {
      * 上传失败
      */
     onUploadFailed(error: any, file: any, fileList: any) {
-        this.$Message.error(error);
+        this.$message.error(error);
     }
 
     /**
@@ -197,9 +197,9 @@ export default class novelManage extends Vue {
         post.theme = post.theme.join('、');
         window.post('novel_update', post, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('保存成功');
+                this.$message.success('保存成功');
             } else {
-                this.$Message.error('保存成功');
+                this.$message.error('保存成功');
             }
         });
     }
@@ -218,10 +218,10 @@ export default class novelManage extends Vue {
         }
         window.post(post_url, data, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('保存成功');
+                this.$message.success('保存成功');
                 this.doGetMenuList();
             } else {
-                this.$Message.error('保存失败');
+                this.$message.error('保存失败');
             }
         });
     }
@@ -242,20 +242,22 @@ export default class novelManage extends Vue {
      * 删除
      */
     deleteNovelData(id: number) {
-        this.$Modal.confirm({
-            title: '删除', content: '确定要删除吗？', onOk: () => {
+       this.$confirm('确定要删除吗？', '删除', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
                 this.doDelete(id)
-            }
-        });
+            });
     }
 
     doDelete(id: number) {
         window.post('menu_delete', {id: id}, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('删除成功');
+                this.$message.success('删除成功');
                 this.doGetMenuList();
             } else {
-                this.$Message.error('删除失败');
+                this.$message.error('删除失败');
             }
         });
     }
@@ -269,7 +271,7 @@ export default class novelManage extends Vue {
                 this.$emit('panel', 'recycle');
                 this.recycleList = res.data;
             } else {
-                this.$Message.error('获取数据失败');
+                this.$message.error('获取数据失败');
             }
         });
     }
@@ -277,10 +279,10 @@ export default class novelManage extends Vue {
     recycleNovel(id: number) {
         window.post('menu_recycle', {id: id}, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('回收成功');
+                this.$message.success('回收成功');
                 this.showDeletedNovels();
             } else {
-                this.$Message.error('回收失败');
+                this.$message.error('回收失败');
             }
         });
     }
@@ -312,7 +314,7 @@ export default class novelManage extends Vue {
                     });
                 });
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
         });
     }
@@ -342,7 +344,7 @@ export default class novelManage extends Vue {
                 this.currentPanel = 'content';
                 this.$emit('panel', 'content');
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
             this.$nextTick(() => {
                 this.editor = new E(this.$refs.editor);
@@ -362,9 +364,9 @@ export default class novelManage extends Vue {
         // this.contentData.content = this.editor.txt.html();
         window.post('chapter_update', this.contentData, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('保存成功');
+                this.$message.success('保存成功');
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
         });
     }
@@ -382,12 +384,12 @@ export default class novelManage extends Vue {
         }
         window.post(post_url, data, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('保存成功');
+                this.$message.success('保存成功');
                 if (res.data) {
                     data.id = parseInt(res.data);
                 }
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
         });
     }
@@ -399,12 +401,12 @@ export default class novelManage extends Vue {
     deleteIndexData(id: number) {
         window.post('catalog_delete', {id: id}, (res: any) => {
             if (res.error_code === 0) {
-                this.$Message.success('删除成功');
+                this.$message.success('删除成功');
                 if (this.currentNovelId) {
                     this.getCatalogs(this.currentNovelId);
                 }
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
         });
     }
@@ -414,7 +416,7 @@ export default class novelManage extends Vue {
             if (res.error_code === 0) {
                 this.novelCatalogs = res.data;
             } else {
-                this.$Message.error(res.message);
+                this.$message.error(res.message);
             }
         });
     }

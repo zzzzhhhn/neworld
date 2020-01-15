@@ -5,7 +5,7 @@
             <canvas id="canvas2" width="1200px" height="800px"></canvas>
         </div>
         <div class="text-center mt10">
-            <Button long type="warning" size="large" class="btn-orcish" @click="start">重新开始</button>
+            <el-button long type="warning" size="large" class="btn-orcish" @click="start">重新开始</el-button>
         </div>
         <audio AUTOPLAY LOOP>
             <source src="../../static/mp3/monster.mp3" type="audio/mpeg">

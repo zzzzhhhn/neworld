@@ -133,17 +133,12 @@ export default class orcishGame {
     }
 
     start() {
-
-        if (this._can2.addEventListener) {
-            document.addEventListener("keydown", this.fireFoxMove.bind(this), true);
-            document.addEventListener("keyup", this.fireFoxStop.bind(this), true);
-        } else {
-            document.addEventListener("onkeydown", this.ieMove);
-            document.addEventListener("onkeyup", this.ieStop.bind(this));
-        }
+        document.addEventListener("keydown", this.fireFoxMove.bind(this), true);
+        document.addEventListener("keyup", this.fireFoxStop.bind(this), true);
+        document.addEventListener("onkeydown", this.ieMove);
+        document.addEventListener("onkeyup", this.ieStop.bind(this));
 
         this.gameLoop();
-
     }
 
     end() {

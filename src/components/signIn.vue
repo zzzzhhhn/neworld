@@ -1,24 +1,24 @@
 <template>
     <div class="app-sign">
-        <Form ref="form_signup" :model="formValidate" :label-width="0">
-            <FormItem label="" prop="account" class="mb30">
-                <Input v-model="formValidate.account" prefix="md-lock" size="large" placeholder="请输入账号" />
-            </FormItem>
-            <FormItem label="" prop="password" class="mb30">
-                <Input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="请输入密码" />
-            </FormItem>
-            <FormItem label="" prop="" class="text-center">
-                <Button type="primary" @click="handleSubmit" long size="large">登录</Button>
-            </FormItem>
-        </Form>
+        <el-form ref="form_signup" :model="formValidate" :label-width="0">
+            <<el-form-item label="" prop="account" class="mb30">
+                <el-input v-model="formValidate.account" prefix="md-lock" size="large" placeholder="请输入账号" />
+            </el-form-item>
+            <<el-form-item label="" prop="password" class="mb30">
+                <el-input v-model="formValidate.password" prefix="md-lock" type="password" size="large" placeholder="请输入密码" />
+            </el-form-item>
+            <<el-form-item label="" prop="" class="text-center">
+                <el-button type="primary" @click="handleSubmit" long size="large">登录</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
 <script lang="ts">
-  import * as moment from 'moment';
-  import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
-  import { Action } from 'vuex-class';
-  import md5 from 'md5';
+    import moment from 'moment';
+    import {Component, Emit, Prop, Vue, Watch} from 'vue-property-decorator';
+    import { Action } from 'vuex-class';
+    import md5 from 'md5';
 
     @Component
     export default class signIN extends Vue {
@@ -35,13 +35,13 @@
 
         handleSubmit() {
             if (this.isPosting) {
-                return this.$Message.warning('你太快了，受不了！')
+                return this.$message.warning('你太快了，受不了！')
             }
             this.postCount = parseInt(localStorage.getItem('signInPostCount') || '0');
             if (this.postCount > 5) {
                 const last_time = localStorage.getItem('signInPostTime') || moment().format('YYYY-MM-DD HH:mm:ss');
                 if (moment().diff(last_time, 'days') < 1) {
-                    return this.$Message.error('服务器累了，明天再来吧');
+                    return this.$message.error('服务器累了，明天再来吧');
                 } else {
                     this.postCount = 0;
                 }
@@ -60,7 +60,7 @@
                     sessionStorage.setItem('zw_token', res.data.token);
                     this.$emit('success');
                 } else {
-                    this.$Message.error(res.message);
+                    this.$message.error(res.message);
                 }
             })
         }
@@ -93,7 +93,7 @@
     }
 
     .btn-sign-in {
-        button {
+        el-button {
             width: 100%;
         }
     }

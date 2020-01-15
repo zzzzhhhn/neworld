@@ -1,22 +1,22 @@
 <template>
     <div class="container">
-        <Row class="mb20 pl20" v-for="(item, index) in gameList" :key="index">
-            <Col span="8">
-                <Input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入游戏名称" />
-            </Col>
-            <Col span="8" class="pl20">
-                <Input v-model="item.url" prefix="ios-book" size="large" placeholder="请输入游戏url" />
-            </Col>
-            <Col span="8" class="pl20">
-            <ButtonGroup size="large">
-                <Button type="success" class="ml20" @click="updateGameData(item)">保存</Button>
-                <Button type="warning" class="ml20" @click="deleteGameData(item.id)">删除</Button>
-            </ButtonGroup>
-            </Col>
-        </Row>
+        <el-row class="mb20 pl20" v-for="(item, index) in gameList" :key="index">
+            <el-col span="8">
+                <el-input v-model="item.name" prefix="ios-book" size="large" placeholder="请输入游戏名称" />
+            </el-col>
+            <el-col span="8" class="pl20">
+                <el-input v-model="item.url" prefix="ios-book" size="large" placeholder="请输入游戏url" />
+            </el-col>
+            <el-col span="8" class="pl20">
+            <el-el-button-group size="large">
+                <el-button type="success" class="ml20" @click="updateGameData(item)">保存</el-button>
+                <el-button type="warning" class="ml20" @click="deleteGameData(item.id)">删除</el-button>
+            </el-el-button-group>
+            </el-col>
+        </el-row>
 
-        <Button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addGameData">新增</Button>
-        <!--<Button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</Button>-->
+        <el-button type="primary" size="large" class="ml20 f18" style="width: 415px" @click="addGameData">新增</el-button>
+        <!--<el-button type="warning" size="large" class="ml20 f18" style="width: 415px" @click="showDeletedNovels">回收站</el-button>-->
     </div>
 </template>
 
@@ -57,10 +57,10 @@
             }
             window.post(post_url, data, (res: any) => {
                 if (res.error_code === 0) {
-                    this.$Message.success('保存成功');
+                    this.$message.success('保存成功');
                     this.doGetMenuList();
                 } else {
-                    this.$Message.error('保存失败');
+                    this.$message.error('保存失败');
                 }
             });
         }
@@ -84,7 +84,7 @@
     //         if (res.error_code === 0) {
     //             this.recycleList = res.data;
     //         } else {
-    //             this.$Message.error('获取数据失败');
+    //             this.$message.error('获取数据失败');
     //         }
     //     });
     // }
@@ -93,19 +93,21 @@
          * 删除
          */
         deleteGameData(id: number) {
-            this.$Modal.confirm({
-                title: '删除', content: '确定要删除吗？', onOk: () => {
-                    this.doDelete(id)
-                }
+            this.$confirm('确定要删除吗？', '删除', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.doDelete(id)
             });
         }
         doDelete(id: number) {
             window.post('menu_delete', {id: id}, (res: any) => {
                 if (res.error_code === 0) {
-                    this.$Message.success('删除成功');
+                    this.$message.success('删除成功');
                     this.doGetMenuList();
                 } else {
-                    this.$Message.error('删除失败');
+                    this.$message.error('删除失败');
                 }
             });
         }

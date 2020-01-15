@@ -15,7 +15,7 @@
             <!--游戏区-->
             <div class="panel-game" id="panel-local"></div>
             <div class="text-center mt10">
-            <Button long type="warning" size="large" class="btn-tetris" @click="reStart">重新开始</Button>
+            <el-button long type="warning" size="large" class="btn-tetris" @click="reStart">重新开始</el-button>
         </div>
         </div>
         

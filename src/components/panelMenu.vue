@@ -70,8 +70,8 @@
         <sign-in v-if="currentType === 'sign_in'" @success="onshowLeftMenu('novels')"></sign-in>
         <sign-up v-if="currentType === 'sign_up'" @success="onshowLeftMenu('sign_in')"></sign-up>
 
-        <Button v-if="currentType === 'manage'" size="large" long type="success" class="f18 o6" @click="onShowMain('manage', 'novel')">管理小说</Button>
-        <Button v-if="currentType === 'manage'" size="large" long type="warning" class="f18 o6" @click="onShowMain('manage', 'game')">管理游戏</Button>
+        <el-button v-if="currentType === 'manage'" size="large" long type="success" class="f18 o6" @click="onShowMain('manage', 'novel')">管理小说</el-button>
+        <el-button v-if="currentType === 'manage'" size="large" long type="warning" class="f18 o6" @click="onShowMain('manage', 'game')">管理游戏</el-button>
 
       </div>
       <!--上标题-->
@@ -212,7 +212,7 @@
                     this.novelInfo.name = name;
                     this.novelCatalogs = this.novelInfo.catalog;
                 } else {
-                    this.$Message.error(res.message);
+                    this.$message.error(res.message);
                 }
             });
         }
@@ -273,7 +273,7 @@
          */
         onshowLeftMenu(type: string) {
 //            if (['sign_in', 'sign_up'].indexOf(type) !== -1) {
-//                return this.$Message.info('暂未开放');
+//                return this.$message.info('暂未开放');
 //            }
             if(type !== this.tempType && this.showLeftMenu) {
                 this.showLeftMenu = false;
@@ -321,7 +321,7 @@
                 if (res.error_code === 0) {
                     this.novelData = res.data;
                 } else {
-                    this.$Message.error(res.message);
+                    this.$message.error(res.message);
                 }
             });
 
@@ -390,7 +390,7 @@
                 if (res.error_code === 0) {
                     this.chapterData = res.data;
                 } else {
-                    this.$Message.error(res.message);
+                    this.$message.error(res.message);
                 }
             });
         }
@@ -689,7 +689,7 @@
           width: 50%;
           margin: 75px 25% 0;
 
-          button {
+          el-button {
             width: 100%;
           }
         }
