@@ -63,10 +63,10 @@
                     localStorage.setItem('signInPostTime', moment().format('YYYY-MM-DD HH:mm:ss'));
                     const password = md5(this.formValidate.password);
                     window.post('signin', {account: this.formValidate.account, password: password}, (res: any) => {
+                        setTimeout(() => {
+                            this.isPosting = false;
+                        }, 1000);
                         if (res.error_code === 0) {
-                            setTimeout(() => {
-                                this.isPosting = false;
-                            }, 1000);
                             this.doGetUserData(res.data);
                             sessionStorage.setItem('zw_token', res.data.token);
                             this.$emit('success');

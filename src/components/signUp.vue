@@ -83,10 +83,10 @@
                     localStorage.setItem('signUpPostTime', moment().format('YYYY-MM-DD HH:mm:ss'));
                     const password = md5(this.formValidate.password);
                     window.post('signup', {account: this.formValidate.account, password: password}, (res: any) => {
+                        setTimeout(() => {
+                            this.isPosting = false;
+                        }, 1000);
                         if (res.error_code === 0) {
-                            setTimeout(() => {
-                                this.isPosting = false;
-                            }, 1000);
                             this.$message.success('注册成功');
                             this.$emit('success');
                         }else {
